@@ -25,9 +25,13 @@ Enunciado:
 
    Deseable:
    ● 💡 Refactorización clara, con uso consistente de herencia e interfaces.
+   
    ● 🧼 Buen estilo de código: nombres claros, comentarios relevantes, organización en paquetes.
+   
    ● 🧼 Validación de usuario y manejo de errores.
+   
    ● 🎮 Mejoras en funcionalidad (ej: puntaje, restart, niveles, velocidad variable).
+   
    ● 🎨 Personalización de UI: colores, fuentes, animaciones simples.
+   
    ● 🧠 Informe reflexivo: buenas decisiones justificadas, dificultades y soluciones bien explicadas.
-
