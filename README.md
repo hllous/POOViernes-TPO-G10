@@ -9,6 +9,7 @@ Enunciado:
 
 1) Crear un juego sencillo tipo snake.
    Requisitos:
+   
    ● ✅ Código funcional (no se rompe).
    
    ● ✅ El juego se puede jugar con teclado y responde.
@@ -22,7 +23,7 @@ Enunciado:
    ● ✅ Entrega con informe explicativo de decisiones (aunque sea breve).
    
    ● ✅ Diagrama de clases
-
+   
    Deseable:
    
    ● 💡 Refactorización clara, con uso consistente de herencia e interfaces.
