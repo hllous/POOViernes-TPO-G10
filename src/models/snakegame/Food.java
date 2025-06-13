@@ -1,7 +1,8 @@
-package models;
+package models.snakegame;
 
 import interfaces.Colisionable;
 import interfaces.Dibujable;
+import models.ElementoDelJuego;
 
 import java.awt.*;
 import java.util.Random;

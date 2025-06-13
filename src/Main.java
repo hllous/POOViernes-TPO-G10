@@ -1,5 +1,4 @@
-import models.MainMenu;
-import models.MenuInicial;
+import models.menus.MainMenu;
 
 import javax.swing.*;
 
@@ -13,15 +12,15 @@ public class Main {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);*/
 
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch(Exception ignored) {}
+        JFrame frame = new JFrame("Mini Arcade");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setResizable(false);
+        frame.setContentPane(new MainMenu(frame));
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
 
-        // Launch MainMenu frame
-        SwingUtilities.invokeLater(() -> {
-            MainMenu menu = new MainMenu();
-            menu.setVisible(true);
-        });
+
     }
 }
 

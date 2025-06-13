@@ -1,4 +1,4 @@
-package models;
+package models.snakegame;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,7 +12,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
     private Snake snake;
     private Food food;
     private boolean gameOver;
-    private JFrame frame; // referencia al JFrame principal
+    private JFrame frame; // reference to the main JFrame
 
     public GamePanel(JFrame frame) {
         this.frame = frame;
@@ -48,15 +48,6 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
             if (snake.checkCollisionWithWall() || snake.checkCollisionWithItself()) {
                 gameOver = true;
                 timer.stop();
-
-                // Volver al menú después de 2 segundos
-                Timer returnTimer = new Timer(2000, ev -> {
-                    frame.setContentPane(new MenuInicial(frame));
-                    frame.revalidate();
-                    frame.repaint();
-                });
-                returnTimer.setRepeats(false);
-                returnTimer.start();
             }
 
             if (snake.getHead().equals(food.getPosition())) {
@@ -66,6 +57,17 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 
             repaint();
         }
+    }
+
+    public void restartGame() {
+        timer.stop();
+        snake = new Snake(WIDTH, HEIGHT);
+        food = new Food(WIDTH, HEIGHT, snake);
+        gameOver = false;
+        timer = new Timer(150, this);
+        timer.start();
+        repaint();
+        this.requestFocusInWindow();
     }
 
     @Override
