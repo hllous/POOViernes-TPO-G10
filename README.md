@@ -24,6 +24,7 @@ Enunciado:
    ● ✅ Diagrama de clases
 
    Deseable:
+   
    ● 💡 Refactorización clara, con uso consistente de herencia e interfaces.
    
    ● 🧼 Buen estilo de código: nombres claros, comentarios relevantes, organización en paquetes.
