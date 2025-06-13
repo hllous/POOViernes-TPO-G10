@@ -5,10 +5,10 @@ Integrantes:
 - Moran, Facundo (1154985)
 - Llousas, Nicolas Facundo (1147795)
 
-Enunciado:
+## Enunciado:
 
 1) Crear un juego sencillo tipo snake.
-   Requisitos:
+   ### Requisitos:
    
    ● ✅ Código funcional (no se rompe).
    
@@ -24,7 +24,7 @@ Enunciado:
    
    ● ✅ Diagrama de clases
    
-   Deseable:
+   ### Deseable:
    
    ● 💡 Refactorización clara, con uso consistente de herencia e interfaces.
    
