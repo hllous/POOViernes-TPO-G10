@@ -60,8 +60,7 @@ public class MainMenu extends JPanel implements ActionListener {
         button.setBackground(new Color(0, 23, 255, 100));
         button.setForeground(Color.WHITE);
         button.setFocusPainted(false);
-        button.setOpaque(false); // Cambia esto a false
-        button.setContentAreaFilled(false); // Añade esto
+        button.setOpaque(true); // Cambia esto a false
 
         // Pinta fondo personalizado con transparencia al pasar el mouse
         button.addMouseListener(new java.awt.event.MouseAdapter() {
