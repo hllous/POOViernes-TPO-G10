@@ -9,7 +9,7 @@ public class MainMenu extends JPanel {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBackground(Color.WHITE);
 
-        JLabel titleLabel = new JLabel("Select a Game");
+        JLabel titleLabel = new JLabel("Selecciona un Juego");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         titleLabel.setBorder(BorderFactory.createEmptyBorder(30, 0, 30, 0));
