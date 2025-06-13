@@ -10,11 +10,17 @@ Enunciado:
 1) Crear un juego sencillo tipo snake.
    Requisitos:
    ● ✅ Código funcional (no se rompe).
+   
    ● ✅ El juego se puede jugar con teclado y responde.
+   
    ● ✅ Uso de al menos una clase abstracta.
+   
    ● ✅ Uso de al menos una interfaz.
+   
    ● ✅ Uso de una colección (ArrayList, LinkedList, etc.)
+   
    ● ✅ Entrega con informe explicativo de decisiones (aunque sea breve).
+   
    ● ✅ Diagrama de clases
 
    Deseable:
