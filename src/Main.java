@@ -1,26 +1,21 @@
-import models.menus.MainMenu;
-
+import menus.MainMenu;
 import javax.swing.*;
+import java.awt.*;
 
 public class Main {
     public static void main(String[] args) {
-        /*JFrame frame = new JFrame("Snake Game");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setResizable(false);
-        frame.setContentPane(new MenuInicial(frame)); // ← Asegurate de pasar el frame
-        frame.pack();
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);*/
+        SwingUtilities.invokeLater(() -> {
+            JFrame frame = new JFrame("Colección de Juegos");
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setUndecorated(true); // Quita bordes y barra de título
 
-        JFrame frame = new JFrame("Mini Arcade");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setResizable(false);
-        frame.setContentPane(new MainMenu(frame));
-        frame.pack();
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
+            // Esto pone la ventana en pantalla completa
+            GraphicsEnvironment.getLocalGraphicsEnvironment()
+                    .getDefaultScreenDevice()
+                    .setFullScreenWindow(frame);
 
-
+            frame.setContentPane(new MainMenu());
+            frame.setVisible(true);
+        });
     }
 }
-
