@@ -8,16 +8,22 @@ public class MainMenu extends JPanel implements ActionListener {
     private JButton snakeButton;
     private JButton flappyButton;
     private JButton runnerButton;
+    private JButton leaderboardButton;
     private JButton exitButton;
     private ImageIcon animatedBackground;
     private Timer repaintTimer;
+
+    /// ------ COMPONENTES MENU ------
 
     public MainMenu() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setOpaque(false);
 
-        // Cargar el GIF animado
+        /// Cargo el gif
+
         animatedBackground = new ImageIcon(getClass().getResource("/assets/menu/Background_Menu.gif"));
+
+        /// ----- Creacion del menu -----
 
         add(Box.createVerticalStrut(60));
         JLabel titleLabel = new JLabel("Colección de Juegos");
@@ -32,6 +38,7 @@ public class MainMenu extends JPanel implements ActionListener {
         snakeButton = createMenuButton("Snake Game");
         flappyButton = createMenuButton("Flappy Bird");
         runnerButton = createMenuButton("Runner");
+        leaderboardButton = createMenuButton("Leaderboards");
         exitButton = createMenuButton("Salir");
 
         add(snakeButton);
@@ -40,17 +47,29 @@ public class MainMenu extends JPanel implements ActionListener {
         add(Box.createVerticalStrut(15));
         add(runnerButton);
         add(Box.createVerticalStrut(15));
+        add(leaderboardButton);
+        add(Box.createVerticalStrut(15));
         add(exitButton);
+
+        /// ----- Fin creacion del menu -----
+
+        /// Veo si pasan el mouse por arriba de los botones
 
         snakeButton.addActionListener(this);
         flappyButton.addActionListener(this);
         runnerButton.addActionListener(this);
+        leaderboardButton.addActionListener(this);
         exitButton.addActionListener(this);
 
-        // Timer para repintar el panel y asegurar la animación
+        /// Timer para repintar el panel
+
         repaintTimer = new Timer(50, e -> repaint());
         repaintTimer.start();
     }
+
+    /// ------ FIN COMPONENTES MENU ------
+
+    /// ------ BOTONES ------
 
     private JButton createMenuButton(String text) {
         JButton button = new JButton(text);
@@ -60,13 +79,12 @@ public class MainMenu extends JPanel implements ActionListener {
         button.setBackground(new Color(0, 23, 255, 100));
         button.setForeground(Color.WHITE);
         button.setFocusPainted(false);
-        button.setOpaque(true); // Cambia esto a false
 
-        // Pinta fondo personalizado con transparencia al pasar el mouse
+        /// Acciones al pasar el mouse
         button.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                button.setBackground(new Color(0, 60, 255, 180)); // Más opaco al pasar mouse
+                button.setBackground(new Color(0, 23, 255, 180)); // Más opaco al pasar mouse
                 button.repaint();
             }
             @Override
@@ -77,18 +95,6 @@ public class MainMenu extends JPanel implements ActionListener {
         });
 
         return button;
-    }
-
-    @Override
-    protected void paintComponent(Graphics g) {
-        // Dibuja primero el fondo animado (GIF) escalado al tamaño del panel
-        if (animatedBackground != null) {
-            int w = getWidth();
-            int h = getHeight();
-            animatedBackground.setImageObserver(this); // Para animación fluida
-            g.drawImage(animatedBackground.getImage(), 0, 0, w, h, this);
-        }
-        super.paintComponent(g); // Luego los componentes encima
     }
 
     @Override
@@ -106,4 +112,22 @@ public class MainMenu extends JPanel implements ActionListener {
             }
         }
     }
+
+    /// ------ FIN BOTONES ------
+
+    /// ------ GRAFICOS ------
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        // Dibuja primero el fondo animado (GIF) escalado al tamaño del panel
+        if (animatedBackground != null) {
+            int w = getWidth();
+            int h = getHeight();
+            animatedBackground.setImageObserver(this); // Para animación fluida
+            g.drawImage(animatedBackground.getImage(), 0, 0, w, h, this);
+        }
+        super.paintComponent(g); // Luego los componentes encima
+    }
+
+    /// ------ FIN GRAFICOS ------
 }
