@@ -5,7 +5,7 @@ import java.awt.*;
 public class Main {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            JFrame frame = new JFrame("Colección de Juegos");
+            JFrame frame = new JFrame("Arcade Games");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setUndecorated(true); // Quita bordes y barra de título
 
