@@ -1,4 +1,6 @@
-package menus;
+package models.menus;
+
+import interfaces.menu.IMenu;
 
 import javax.sound.sampled.*;
 
@@ -7,27 +9,37 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.InputStream;
 
-public class MainMenu extends JPanel implements ActionListener {
-    private JButton snakeButton;
-    private JButton flappyButton;
-    private JButton marioBrosButton;
-    private JButton leaderboardButton;
-    private JButton exitButton;
+public class MainMenu extends JPanel implements ActionListener, IMenu {
+
+    /// Componentes swing
+    private JFrame frame;
+    private JButton snakeBoton;
+    private JButton flappyBoton;
+    private JButton marioBrosBoton;
+    private JButton exitBoton;
+
+    /// Componentes extra
     private ImageIcon animatedBackground;
     private Timer repaintTimer;
-    private Clip backgroundMusicClip;
+    private Clip backgroundMusic;
 
     /// ------ COMPONENTES MENU ------
 
     /// Menu principal
 
-    public MainMenu() {
+    public MainMenu(JFrame frame) {
+        this.frame = frame;
+
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setOpaque(false);
 
-        /// Cargo el gif
+        /// ----- Cargo el gif -----
 
-        animatedBackground = new ImageIcon(getClass().getResource("/assets/menu/bg.gif"));
+        try {
+            animatedBackground = new ImageIcon(getClass().getResource("/assets/menu/bg.gif"));
+        } catch (Exception e) {
+            System.err.println("Error cargando imagen de fondo: " + e.getMessage());
+        }
 
         /// ----- Creacion del menu -----
 
@@ -41,35 +53,31 @@ public class MainMenu extends JPanel implements ActionListener {
         titleLabel.setOpaque(false);
         add(titleLabel);
 
-        /// Opciones Juegos, leaderboards y salir.
+        /// Opciones Juegos y salir.
 
         add(Box.createVerticalStrut(30));
 
-        snakeButton = createMenuButton("Snake Game");
-        flappyButton = createMenuButton("Flappy Bird");
-        marioBrosButton = createMenuButton("Super Mario Bros.");
-        leaderboardButton = createMenuButton("Leaderboards");
-        exitButton = createMenuButton("Salir");
+        snakeBoton = crearBotonMenu("Snake Game");
+        flappyBoton = crearBotonMenu("Flappy Bird");
+        marioBrosBoton = crearBotonMenu("Super Mario Bros.");
+        exitBoton = crearBotonMenu("Salir");
 
-        add(snakeButton);
+        add(snakeBoton);
         add(Box.createVerticalStrut(15));
-        add(flappyButton);
+        add(flappyBoton);
         add(Box.createVerticalStrut(15));
-        add(marioBrosButton);
+        add(marioBrosBoton);
         add(Box.createVerticalStrut(15));
-        add(leaderboardButton);
-        add(Box.createVerticalStrut(15));
-        add(exitButton);
+        add(exitBoton);
 
         /// ----- Fin creacion del menu -----
 
         /// Veo si pasan el mouse por arriba de los botones
 
-        snakeButton.addActionListener(this);
-        flappyButton.addActionListener(this);
-        marioBrosButton.addActionListener(this);
-        leaderboardButton.addActionListener(this);
-        exitButton.addActionListener(this);
+        snakeBoton.addActionListener(this);
+        flappyBoton.addActionListener(this);
+        marioBrosBoton.addActionListener(this);
+        exitBoton.addActionListener(this);
 
         /// Timer para repintar el panel
 
@@ -79,20 +87,23 @@ public class MainMenu extends JPanel implements ActionListener {
         /// Musica de fondo
 
         playBackgroundMusic("/assets/menu/MusicaMenu.wav");
+
     }
+
+    /// Player musica
 
     private void playBackgroundMusic(String resourcePath) {
         try {
-            InputStream audioSrc = getClass().getResourceAsStream(resourcePath);
-            if (audioSrc == null) {
-                System.err.println("No se encontró el archivo de audio: " + resourcePath);
+            InputStream musica = getClass().getResourceAsStream(resourcePath);
+            if (musica == null) {
+                System.err.println("No se encontró el archivo de musica: " + resourcePath);
                 return;
             }
-            InputStream bufferedIn = new java.io.BufferedInputStream(audioSrc);
+            InputStream bufferedIn = new java.io.BufferedInputStream(musica);
             AudioInputStream audioStream = AudioSystem.getAudioInputStream(bufferedIn);
-            backgroundMusicClip = AudioSystem.getClip();
-            backgroundMusicClip.open(audioStream);
-            backgroundMusicClip.loop(Clip.LOOP_CONTINUOUSLY);
+            backgroundMusic = AudioSystem.getClip();
+            backgroundMusic.open(audioStream);
+            backgroundMusic.loop(Clip.LOOP_CONTINUOUSLY);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -100,7 +111,7 @@ public class MainMenu extends JPanel implements ActionListener {
 
     /// Font
 
-    public static Font loadFont(float size) {
+    public Font loadFont(float size) {
         try {
             /// Uso esto asi funciona de manera portable
 
@@ -118,11 +129,9 @@ public class MainMenu extends JPanel implements ActionListener {
         }
     }
 
-    /// ------ FIN COMPONENTES MENU ------
+    /// Creacion de botones
 
-    /// ------ BOTONES ------
-
-    private JButton createMenuButton(String text) {
+    public JButton crearBotonMenu(String text) {
         JButton button = new JButton(text);
         button.setAlignmentX(Component.CENTER_ALIGNMENT);
         button.setMaximumSize(new Dimension(700, 50));
@@ -148,37 +157,46 @@ public class MainMenu extends JPanel implements ActionListener {
         return button;
     }
 
+    /// ------ FIN COMPONENTES MENU ------
+
+    /// ----- COMPONENTES SWING -----
+
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == snakeButton) {
+        if (e.getSource() == snakeBoton) {
+
             JOptionPane.showMessageDialog(this, "Snake Game se implementará próximamente.");
-        } else if (e.getSource() == flappyButton) {
+            backgroundMusic.stop();
+            backgroundMusic.close();
+            repaintTimer.stop();
+
+        } else if (e.getSource() == flappyBoton) {
+
             JOptionPane.showMessageDialog(this, "Flappy Bird se implementará próximamente.");
-        } else if (e.getSource() == marioBrosButton) {
-            JOptionPane.showMessageDialog(this, "Runner se implementará próximamente.");
-        } else if (e.getSource() == exitButton) {
-            int confirm = JOptionPane.showConfirmDialog(this, "¿Seguro que quieres salir?", "Salir", JOptionPane.YES_NO_OPTION);
-            if (confirm == JOptionPane.YES_OPTION) {
-                System.exit(0);
-            }
+
+        } else if (e.getSource() == marioBrosBoton) {
+
+            backgroundMusic.stop();
+            backgroundMusic.close();
+            repaintTimer.stop();
+            frame.setContentPane(new MarioBrosMenu(frame));
+            frame.revalidate();
+
+        } else if (e.getSource() == exitBoton) {
+
+            System.exit(0);
         }
+
     }
-
-    /// ------ FIN BOTONES ------
-
-    /// ------ GRAFICOS ------
 
     @Override
     protected void paintComponent(Graphics g) {
-        // Dibuja primero el fondo animado (GIF) escalado al tamaño del panel
+        super.paintComponent(g);
         if (animatedBackground != null) {
-            int w = getWidth();
-            int h = getHeight();
-            animatedBackground.setImageObserver(this); // Para animación fluida
-            g.drawImage(animatedBackground.getImage(), 0, 0, w, h, this);
+            g.drawImage(animatedBackground.getImage(), 0, 0, getWidth(), getHeight(), this);
         }
-        super.paintComponent(g); // Luego los componentes encima
     }
 
-    /// ------ FIN GRAFICOS ------
+    /// ----- FIN COMPONENTES SWING -----
+
 }
