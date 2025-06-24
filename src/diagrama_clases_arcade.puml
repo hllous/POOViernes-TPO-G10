@@ -1,0 +1,298 @@
+@startuml Mario Bros Complete - Simple
+
+package "models.menus" {
+
+    class MainMenu {
+        - frame: JFrame
+        - snakeBoton: JButton
+        - flappyBoton: JButton
+        - marioBrosBoton: JButton
+        - exitBoton: JButton
+        - backgroundGif: ImageIcon
+        - repaintTimer: Timer
+        - backgroundMusic: Clip
+
+        + MainMenu(JFrame)
+        + loadFont(float): Font
+        + crearBotonMenu(String): JButton
+        + actionPerformed(ActionEvent)
+        # paintComponent(Graphics)
+        - playBackgroundMusic(String)
+    }
+
+    class MarioBrosMenu {
+        - frame: JFrame
+        - fondo: BufferedImage
+        - jugarBoton: JButton
+        - volverBoton: JButton
+
+        + MarioBrosMenu(JFrame)
+        + crearBotonMenu(String): JButton
+        + loadFont(float): Font
+        + actionPerformed(ActionEvent)
+        # paintComponent(Graphics)
+        - inicializarComponentes()
+        - cargarFondo()
+    }
+}
+
+package "models.marioBros" {
+
+    class MarioBrosPanel {
+        - frame: JFrame
+        - menuPausa: JPanel
+        - menuVictoria: JPanel
+        - btnReanudar: JButton
+        - btnReiniciar: JButton
+        - btnSalir: JButton
+        - btnVolverMenu: JButton
+        - repaintTimer: Timer
+        - nivelActual: Nivel
+        - gameThread: Thread
+        - running: boolean
+        - pausado: boolean
+        - ganado: boolean
+
+        + MarioBrosPanel(JFrame)
+        + startGame()
+        + run()
+        + reanudar()
+        + reiniciar()
+        + salir()
+        + crearBotonMenu(String): JButton
+        + loadFont(float): Font
+        + actionPerformed(ActionEvent)
+        + keyPressed(KeyEvent)
+        + keyReleased(KeyEvent)
+        + keyTyped(KeyEvent)
+        # paintComponent(Graphics)
+        - crearMenuPausa()
+        - crearMenuVictoria()
+    }
+}
+
+package "models.marioBros.niveles" {
+
+    abstract class Nivel {
+        # fondo: BufferedImage
+        - backgroundMusicClip: Clip
+        # camaraX: int
+        # mario: Mario
+        # enemigos: List<Enemigo>
+        # bloques: List<Bloque>
+        # piso: int
+        + bloque: int
+        + ventana_alto: int
+        + ventala_ancho: int
+
+        + Nivel(String, String)
+        + actualizar()
+        + reiniciarNivel()
+        + dibujar(Graphics, int, int)
+        + playBackgroundMusic(String)
+        + stopBackgroundMusic()
+        + loadFont(float): Font
+        + getMario(): Mario
+        + getEnemigos(): List<Enemigo>
+        + getBloques(): List<Bloque>
+        + crearBloqueTuberia(int, int, int)
+        + crearBloqueMortal(int, int, int, int)
+        + crearBloquePregunta(int, int, int, int)
+        + crearBloqueVictoria(int, int, int, int)
+        + crearBloqueLadrillo(int, int, int, int)
+        + crearEnemigo(int, int)
+        # {abstract} inicializarEntidades()
+        - crearFondoNivel(String)
+    }
+
+    class Nivel1_1 {
+        - piso: int
+
+        + Nivel1_1()
+        # inicializarEntidades()
+    }
+}
+
+package "models.marioBros.entidades" {
+
+    class Mario {
+        - posicionXMario: double
+        - poscionYMario: double
+        - ancho: int
+        - alto: int
+        - dx: double
+        - dy: double
+        - monedas: int
+        - gifMario: ImageIcon
+        - gravedad: double
+        - salto: double
+        - velocidad: double
+        - velocidadCaida: double
+        - tocoBloqueVictoria: boolean
+        - tocoBloquemortal: boolean
+        - saltando: boolean
+        - enElAire: boolean
+
+        + Mario(int, int)
+        + getBounds(): Rectangle
+        + mover(List<Bloque>)
+        + agregarMoneda()
+        + dibujar(Graphics, int, int)
+        + keyPressed(KeyEvent)
+        + keyReleased(KeyEvent)
+        + getPosicionXMario(): int
+        + getPoscionYMario(): int
+        + getAncho(): int
+        + getAlto(): int
+        + getDx(): double
+        + getDy(): double
+        + enElAire(): boolean
+        + getMonedas(): int
+        + getTocoBloqueVictoria(): boolean
+        + getTocoBloqueMortal(): boolean
+        - moverHorizontal(List<Bloque>)
+        - moverVertical(List<Bloque>)
+        - aplicarGravedad()
+        - verificarSuelo()
+        - chocoConBloque(Bloque): boolean
+    }
+
+    class Enemigo {
+        - x: double
+        - y: double
+        - ancho: int
+        - alto: int
+        - velocidad: double
+        - moviendoIzquierda: boolean
+        - dy: double
+        - GRAVEDAD: double
+        - MAX_FALL_SPEED: double
+        - bloques: List<Bloque>
+        - gifGoomba: ImageIcon
+        - eliminado: boolean
+
+        + Enemigo(int, int)
+        + getBounds(): Rectangle
+        + verificarColisionConMario(Rectangle, double): boolean
+        + eliminar()
+        + estaEliminado(): boolean
+        + setBloques(List<Bloque>)
+        + mover()
+        + dibujar(Graphics)
+        + dibujar(Graphics, int, int)
+        + getX(): int
+        + getY(): int
+        + getAncho(): int
+        + getAlto(): int
+        - esColisionDesdeArriba(Rectangle, double): boolean
+    }
+}
+
+package "models.marioBros.bloques" {
+
+    abstract class Bloque {
+        # x: int
+        # y: int
+        # ancho: int
+        # alto: int
+
+        + Bloque(int, int, int, int)
+        + getBounds(): Rectangle
+        + alColisionar(Mario)
+        + esSolido(): boolean
+        + dibujar(Graphics, int, int)
+        + getX(): int
+        + getY(): int
+        + getAncho(): int
+        + getAlto(): int
+        + setX(int)
+        + setY(int)
+        + setAncho(int)
+        + setAlto(int)
+    }
+
+    class BloqueLadrillo {
+        + BloqueLadrillo(int, int, int, int)
+        + esSolido(): boolean
+        + alColisionar(Mario)
+    }
+
+    class BloqueMortal {
+        + BloqueMortal(int, int, int, int)
+        + esSolido(): boolean
+    }
+
+    class BloquePregunta {
+        - yaUsado: boolean
+
+        + BloquePregunta(int, int, int, int)
+        + esSolido(): boolean
+        + alColisionar(Mario)
+        + puedePararse(Mario): boolean
+        + estaUsado(): boolean
+        + dibujar(Graphics, int, int)
+        - esColisionDesdeAbajo(Mario): boolean
+    }
+
+    class BloqueTuberia {
+        + BloqueTuberia(int, int, int, int)
+        + esSolido(): boolean
+    }
+
+    class BloqueVictoria {
+        + BloqueVictoria(int, int, int, int)
+        + esSolido(): boolean
+    }
+}
+
+package "interfaces.marioBros" {
+    interface IEntidad {
+        + mover()
+        + dibujar(Graphics)
+        + getX(): int
+        + getY(): int
+        + getAncho(): int
+        + getAlto(): int
+    }
+}
+
+package "interfaces.menu" {
+    interface IMenu {
+        + reanudar()
+        + reiniciar()
+        + salir()
+    }
+}
+
+' Implementaciones de interfaz
+MainMenu ..|> IMenu
+MarioBrosMenu ..|> IMenu
+MarioBrosPanel ..|> IMenu
+Enemigo ..|> IEntidad
+
+' Herencia
+Nivel1_1 --|> Nivel
+BloqueLadrillo --|> Bloque
+BloqueMortal --|> Bloque
+BloquePregunta --|> Bloque
+BloqueTuberia --|> Bloque
+BloqueVictoria --|> Bloque
+
+' Navegación entre clases
+MainMenu --> MarioBrosMenu : crea
+MarioBrosMenu --> MainMenu : crea
+MarioBrosMenu --> MarioBrosPanel : crea
+MarioBrosPanel --> MarioBrosMenu : crea
+
+' Composición
+MarioBrosPanel --> Nivel : contiene
+MarioBrosPanel --> Nivel1_1 : crea
+Nivel --> Mario : contiene
+Nivel --> Enemigo : contiene
+Nivel --> Bloque : contiene
+
+' Interacciones
+Mario --> Bloque : interactua con
+Enemigo --> Bloque : interactua con
+
+@enduml
