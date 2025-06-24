@@ -168,7 +168,7 @@ public class Mario {
     public int getAlto() { return alto; }
     public double getDx() { return dx; }
     public double getDy() { return dy; }
-    public boolean isEnElAire() { return enElAire; }
+    public boolean enElAire() { return enElAire; }
     public int getMonedas() { return monedas; }
     public boolean getTocoBloqueVictoria() { return tocoBloqueVictoria; }
     public boolean getTocoBloqueMortal() { return tocoBloquemortal; }

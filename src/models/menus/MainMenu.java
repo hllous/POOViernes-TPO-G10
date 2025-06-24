@@ -19,7 +19,7 @@ public class MainMenu extends JPanel implements ActionListener, IMenu {
     private JButton exitBoton;
 
     /// Componentes extra
-    private ImageIcon animatedBackground;
+    private ImageIcon backgroundGif;
     private Timer repaintTimer;
     private Clip backgroundMusic;
 
@@ -36,7 +36,7 @@ public class MainMenu extends JPanel implements ActionListener, IMenu {
         /// ----- Cargo el gif -----
 
         try {
-            animatedBackground = new ImageIcon(getClass().getResource("/assets/menu/bg.gif"));
+            backgroundGif = new ImageIcon(getClass().getResource("/assets/menu/bg.gif"));
         } catch (Exception e) {
             System.err.println("Error cargando imagen de fondo: " + e.getMessage());
         }
@@ -192,8 +192,8 @@ public class MainMenu extends JPanel implements ActionListener, IMenu {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        if (animatedBackground != null) {
-            g.drawImage(animatedBackground.getImage(), 0, 0, getWidth(), getHeight(), this);
+        if (backgroundGif != null) {
+            g.drawImage(backgroundGif.getImage(), 0, 0, getWidth(), getHeight(), this);
         }
     }
 
