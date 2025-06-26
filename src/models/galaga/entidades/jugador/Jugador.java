@@ -1,9 +1,11 @@
 package models.galaga.entidades.jugador;
 
+import interfaces.galaga.IEntidad;
+
 import javax.swing.*;
 import java.awt.*;
 
-public class Jugador {
+public class Jugador implements IEntidad {
     public int x, y;
     private int velocidad = 10;
     private int limitePantalla = 800; // Valor predeterminado
@@ -30,6 +32,12 @@ public class Jugador {
 
     public void setLimitePantalla(int ancho) {
         this.limitePantalla = ancho;
+    }
+
+    public void mover(){
+        moverIzquierda();
+        moverDerecha();
+
     }
 
     public void moverIzquierda() {
@@ -65,5 +73,15 @@ public class Jugador {
             g.setColor(Color.GREEN);
             g.fillRect(x, y, ancho, alto);
         }
+    }
+
+    @Override
+    public int getX() {
+        return x;
+    }
+
+    @Override
+    public int getY() {
+        return y;
     }
 }
