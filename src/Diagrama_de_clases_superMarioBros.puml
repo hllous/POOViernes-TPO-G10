@@ -1,11 +1,29 @@
-@startuml Diagrama de clases Super Mario Bros.
+@startuml "MarioBros Component Diagram"
 
+' --- INTERFACES ---
+package "interfaces.menu" {
+    interface IMenu {
+        + loadFont(float): Font
+        + crearBotonMenu(String): JButton
+    }
+}
+
+package "interfaces.marioBros" {
+    interface IEntidad {
+        + mover(): void
+        + getX(): double
+        + getY(): double
+        + getAncho(): int
+        + getAlto(): int
+    }
+}
+
+' --- MODELS.MENUS PACKAGE DE MARIO BROS ---
 package "models.menus" {
-
     class MainMenu {
-        - frame: JFrame
+        - JFrame: frame
         - snakeBoton: JButton
-        - flappyBoton: JButton
+        - galagaButton: JButton
         - marioBrosBoton: JButton
         - exitBoton: JButton
         - backgroundGif: ImageIcon
@@ -17,7 +35,7 @@ package "models.menus" {
         + crearBotonMenu(String): JButton
         + actionPerformed(ActionEvent)
         # paintComponent(Graphics)
-        - playBackgroundMusic(String)
+        - playBackgroundMusic(String): void
     }
 
     class MarioBrosMenu {
@@ -27,19 +45,18 @@ package "models.menus" {
         - volverBoton: JButton
 
         + MarioBrosMenu(JFrame)
-        + crearBotonMenu(String): JButton
         + loadFont(float): Font
-        + actionPerformed(ActionEvent)
-        # paintComponent(Graphics)
-        - inicializarComponentes()
-        - cargarFondo()
+        + crearBotonMenu(String): JButton
+        + actionPerformed(ActionEvent): void
+        # paintComponent(Graphics): void
+        - inicializarComponentes(): void
+        - cargarFondo(): void
     }
 }
 
+' --- MODELS.MARIOBROS PACKAGE ---
 package "models.marioBros" {
-
     class MarioBrosPanel {
-        - frame: JFrame
         - menuPausa: JPanel
         - menuVictoria: JPanel
         - btnReanudar: JButton
@@ -47,6 +64,7 @@ package "models.marioBros" {
         - btnSalir: JButton
         - btnVolverMenu: JButton
         - repaintTimer: Timer
+        - frame: JFrame
         - nivelActual: Nivel
         - gameThread: Thread
         - running: boolean
@@ -54,25 +72,25 @@ package "models.marioBros" {
         - ganado: boolean
 
         + MarioBrosPanel(JFrame)
-        + startGame()
-        + run()
-        + reanudar()
-        + reiniciar()
-        + salir()
+        + reanudar(): void
+        + reiniciar(): void
+        + salir(): void
         + crearBotonMenu(String): JButton
         + loadFont(float): Font
-        + actionPerformed(ActionEvent)
-        + keyPressed(KeyEvent)
-        + keyReleased(KeyEvent)
-        + keyTyped(KeyEvent)
-        # paintComponent(Graphics)
-        - crearMenuPausa()
-        - crearMenuVictoria()
+        + startGame(): void
+        + run(): void
+        + actionPerformed(ActionEvent): void
+        + keyPressed(KeyEvent): void
+        + keyReleased(KeyEvent): void
+        + keyTyped(KeyEvent): void
+        # paintComponent(Graphics): void
+        - crearMenuPausa(): void
+        - crearMenuVictoria(): void
     }
 }
 
+' --- MODELS.MARIOBROS.NIVELES PACKAGE ---
 package "models.marioBros.niveles" {
-
     abstract class Nivel {
         # fondo: BufferedImage
         - backgroundMusicClip: Clip
@@ -86,35 +104,35 @@ package "models.marioBros.niveles" {
         + ventala_ancho: int
 
         + Nivel(String, String)
-        + actualizar()
-        + reiniciarNivel()
-        + dibujar(Graphics, int, int)
-        + playBackgroundMusic(String)
-        + stopBackgroundMusic()
+        + playBackgroundMusic(String): void
+        + stopBackgroundMusic(): void
+        + actualizar(): void
+        + reiniciarNivel(): void
+        + dibujar(Graphics, int, int): void
         + loadFont(float): Font
         + getMario(): Mario
         + getEnemigos(): List<Enemigo>
         + getBloques(): List<Bloque>
-        + crearBloqueTuberia(int, int, int)
-        + crearBloqueMortal(int, int, int, int)
-        + crearBloquePregunta(int, int, int, int)
-        + crearBloqueVictoria(int, int, int, int)
-        + crearBloqueLadrillo(int, int, int, int)
-        + crearEnemigo(int, int)
-        # {abstract} inicializarEntidades()
-        - crearFondoNivel(String)
+        + crearBloqueTuberia(int, int, int): void
+        + crearBloqueMortal(int, int, int, int): void
+        + crearBloquePregunta(int, int, int, int): void
+        + crearBloqueVictoria(int, int, int, int): void
+        + crearBloqueLadrillo(int, int, int, int): void
+        + crearEnemigo(int, int): void
+        # {abstract} inicializarEntidades(): void
+        - crearFondoNivel(String): void
     }
 
     class Nivel1_1 {
         - piso: int
 
         + Nivel1_1()
-        # inicializarEntidades()
+        # inicializarEntidades(): void
     }
 }
 
+' --- MODELS.MARIOBROS.ENTIDADES PACKAGE ---
 package "models.marioBros.entidades" {
-
     class Mario {
         - posicionXMario: double
         - poscionYMario: double
@@ -135,25 +153,26 @@ package "models.marioBros.entidades" {
 
         + Mario(int, int)
         + getBounds(): Rectangle
-        + mover(List<Bloque>)
-        + agregarMoneda()
-        + dibujar(Graphics, int, int)
-        + keyPressed(KeyEvent)
-        + keyReleased(KeyEvent)
+        + mover(List<Bloque>): void
+        + agregarMoneda(): void
+        + dibujar(Graphics, int, int): void
+        + keyPressed(KeyEvent): void
+        + keyReleased(KeyEvent): void
         + getPosicionXMario(): int
         + getPoscionYMario(): int
         + getAncho(): int
         + getAlto(): int
-        + getDx(): double
-        + getDy(): double
+        + mover(): void
+        + getX(): double
+        + getY(): double
         + enElAire(): boolean
         + getMonedas(): int
         + getTocoBloqueVictoria(): boolean
         + getTocoBloqueMortal(): boolean
-        - moverHorizontal(List<Bloque>)
-        - moverVertical(List<Bloque>)
-        - aplicarGravedad()
-        - verificarSuelo()
+        - moverHorizontal(List<Bloque>): void
+        - moverVertical(List<Bloque>): void
+        - aplicarGravedad(): void
+        - verificarSuelo(): void
         - chocoConBloque(Bloque): boolean
     }
 
@@ -174,22 +193,22 @@ package "models.marioBros.entidades" {
         + Enemigo(int, int)
         + getBounds(): Rectangle
         + verificarColisionConMario(Rectangle, double): boolean
-        + eliminar()
+        + eliminar(): void
         + estaEliminado(): boolean
-        + setBloques(List<Bloque>)
-        + mover()
-        + dibujar(Graphics)
-        + dibujar(Graphics, int, int)
-        + getX(): int
-        + getY(): int
+        + getX(): double
+        + getY(): double
         + getAncho(): int
         + getAlto(): int
+        + mover(): void
+        + dibujar(Graphics): void
+        + setBloques(List<Bloque>): void
+        + dibujar(Graphics, int, int): void
         - esColisionDesdeArriba(Rectangle, double): boolean
     }
 }
 
+' --- MODELS.MARIOBROS.BLOQUES PACKAGE ---
 package "models.marioBros.bloques" {
-
     abstract class Bloque {
         # x: int
         # y: int
@@ -197,24 +216,24 @@ package "models.marioBros.bloques" {
         # alto: int
 
         + Bloque(int, int, int, int)
-        + getBounds(): Rectangle
-        + alColisionar(Mario)
-        + esSolido(): boolean
-        + dibujar(Graphics, int, int)
         + getX(): int
+        + setX(int): void
         + getY(): int
+        + setY(int): void
         + getAncho(): int
+        + setAncho(int): void
         + getAlto(): int
-        + setX(int)
-        + setY(int)
-        + setAncho(int)
-        + setAlto(int)
+        + setAlto(int): void
+        + getBounds(): Rectangle
+        + alColisionar(Mario): void
+        + esSolido(): boolean
+        + dibujar(Graphics, int, int): void
     }
 
     class BloqueLadrillo {
         + BloqueLadrillo(int, int, int, int)
         + esSolido(): boolean
-        + alColisionar(Mario)
+        + alColisionar(Mario): void
     }
 
     class BloqueMortal {
@@ -227,10 +246,10 @@ package "models.marioBros.bloques" {
 
         + BloquePregunta(int, int, int, int)
         + esSolido(): boolean
-        + alColisionar(Mario)
+        + alColisionar(Mario): void
         + puedePararse(Mario): boolean
         + estaUsado(): boolean
-        + dibujar(Graphics, int, int)
+        + dibujar(Graphics, int, int): void
         - esColisionDesdeAbajo(Mario): boolean
     }
 
@@ -245,54 +264,32 @@ package "models.marioBros.bloques" {
     }
 }
 
-package "interfaces.marioBros" {
-    interface IEntidad {
-        + mover()
-        + dibujar(Graphics)
-        + getX(): int
-        + getY(): int
-        + getAncho(): int
-        + getAlto(): int
-    }
-}
-
-package "interfaces.menu" {
-    interface IMenu {
-        + reanudar()
-        + reiniciar()
-        + salir()
-    }
-}
-
-' Implementaciones de interfaz
+' --- IMPLEMENTATIONS OF INTERFACES ---
 MainMenu ..|> IMenu
 MarioBrosMenu ..|> IMenu
 MarioBrosPanel ..|> IMenu
+Mario ..|> IEntidad
 Enemigo ..|> IEntidad
 
-' Herencia
+' --- INHERITANCE RELATIONSHIPS ---
 Nivel1_1 --|> Nivel
+
 BloqueLadrillo --|> Bloque
 BloqueMortal --|> Bloque
 BloquePregunta --|> Bloque
 BloqueTuberia --|> Bloque
 BloqueVictoria --|> Bloque
 
-' Navegación entre clases
-MainMenu --> MarioBrosMenu : crea
-MarioBrosMenu --> MainMenu : crea
-MarioBrosMenu --> MarioBrosPanel : crea
-MarioBrosPanel --> MarioBrosMenu : crea
+' --- NAVIGATION BETWEEN CLASSES ---
+MainMenu ..> MarioBrosMenu : crea
+MarioBrosMenu ..> MainMenu : crea
+MarioBrosMenu ..> MarioBrosPanel : crea
+MarioBrosPanel ..> MarioBrosMenu : crea
 
-' Composición
-MarioBrosPanel --> Nivel : contiene
-MarioBrosPanel --> Nivel1_1 : crea
-Nivel --> Mario : contiene
-Nivel --> Enemigo : contiene
-Nivel --> Bloque : contiene
-
-' Interacciones
-Mario --> Bloque : interactua con
-Enemigo --> Bloque : interactua con
+' --- COMPOSITION RELATIONSHIPS ---
+MarioBrosPanel *-- Nivel : contiene
+Nivel *-- Mario : contiene
+Nivel *-- Enemigo : contiene
+Nivel *-- Bloque : contiene
 
 @enduml

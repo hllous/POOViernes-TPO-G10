@@ -1,0 +1,136 @@
+@startuml SnakeGame Component Diagram with MainMenu Interaction
+
+' --- INTERFACES ---
+package "interfaces.menu" {
+    interface IMenu {
+        + reanudar()
+        + reiniciar()
+        + salir()
+    }
+}
+
+' --- MODELS.MENUS PACKAGE ---
+package "models.menus" {
+    class MainMenu {
+        - frame: JFrame
+        - snakeBoton: JButton
+        - galagaButton: JButton
+        - marioBrosBoton: JButton
+        - exitBoton: JButton
+        - backgroundGif: ImageIcon
+        - repaintTimer: Timer
+        - backgroundMusic: Clip
+
+        + MainMenu(JFrame)
+        + loadFont(float): Font
+        + crearBotonMenu(String): JButton
+        + actionPerformed(ActionEvent)
+        # paintComponent(Graphics)
+        - playBackgroundMusic(String)
+    }
+}
+
+' --- MODELOS SNAKE GAME PACKAGE ---
+package "models.snakeGame" {
+    class SnakeGamePanel {
+        - TILE_SIZE: int
+        - WIDTH: int
+        - HEIGHT: int
+        - GAME_WIDTH: int
+        - GAME_HEIGHT: int
+        - gameTimer: Timer
+        - delay: int
+        - snake: Snake
+        - food: Food
+        - boost: Boost
+        - boostVisible: boolean
+        - boostActive: boolean
+        - boostTicks: int
+        - score: int
+        - topScore: int
+        - gameOver: boolean
+        - gameStarted: boolean
+        - gamePaused: boolean
+        - frame: JFrame
+        - menuPausa: JPanel
+        - btnReanudar: JButton
+        - btnReiniciar: JButton
+        - btnSalir: JButton
+        - scoreFile: File
+
+        + SnakeGamePanel(JFrame)
+        - crearMenuPausa(): void
+        + crearBotonMenu(String): JButton
+        + reanudar(): void
+        + reiniciar(): void
+        + salir(): void
+        - initGame(): void
+        - loadTopScore(): void
+        - saveTopScore(): void
+        # paintComponent(Graphics): void
+        - drawStartMenu(Graphics, int, int): void
+        - drawGameOver(Graphics, int, int): void
+        + actionPerformed(ActionEvent): void
+        + keyPressed(KeyEvent): void
+        + keyReleased(KeyEvent): void
+        + keyTyped(KeyEvent): void
+    }
+
+    class Snake {
+        - body: LinkedList<Point>
+        - direction: String
+        - previousDirection: String
+        - maxWidth: int
+        - maxHeight: int
+        - alive: boolean
+
+        + Snake(int, int)
+        + move(): void
+        + grow(): void
+        + draw(Graphics): void
+        + setDirection(String): void
+        + getHeadX(): int
+        + getHeadY(): int
+        + checkCollision(): boolean
+        + isAlive(): boolean
+    }
+
+    abstract class ItemDelJuego {
+        # x: int
+        # y: int
+
+        + ItemDelJuego(int, int)
+        + {abstract} draw(Graphics): void
+        + respawn(int, int): void
+        + getX(): int
+        + getY(): int
+    }
+
+    class Food {
+        + Food(int, int)
+        + draw(Graphics): void
+    }
+
+    class Boost {
+        + Boost(int, int)
+        + draw(Graphics): void
+    }
+}
+
+' --- IMPLEMENTATIONS OF INTERFACES ---
+MainMenu ..|> IMenu
+
+' --- INHERITANCE RELATIONSHIPS ---
+Food --|> ItemDelJuego
+Boost --|> ItemDelJuego
+
+' --- COMPOSITION & ASSOCIATION RELATIONSHIPS ---
+SnakeGamePanel *-- Snake : contiene
+SnakeGamePanel *-- Food : contiene
+SnakeGamePanel *-- Boost : contiene
+
+' --- NAVIGATION BETWEEN CLASSES ---
+MainMenu ..> SnakeGamePanel : crea
+SnakeGamePanel ..> MainMenu : crea
+
+@enduml
