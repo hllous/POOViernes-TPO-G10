@@ -299,7 +299,7 @@ GalagaPanel *-- DisparoEnemigo : contiene
 GalagaPanel *-- FondoGalaga : contiene
 GalagaMenu *-- FondoGalaga : contiene
 
-' --- INTERACTION RELATIONSHIPS ---
+' --- INTERACCIONES ---
 Disparo ..> Enemigo : interactua con
 DisparoEnemigo ..> Jugador : interactua con
 

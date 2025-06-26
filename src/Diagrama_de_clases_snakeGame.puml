@@ -117,19 +117,19 @@ package "models.snakeGame" {
     }
 }
 
-' --- IMPLEMENTATIONS OF INTERFACES ---
+' --- IMPLEMENTACION DE INTERFACES ---
 MainMenu ..|> IMenu
 
-' --- INHERITANCE RELATIONSHIPS ---
+' --- HERENICA ---
 Food --|> ItemDelJuego
 Boost --|> ItemDelJuego
 
-' --- COMPOSITION & ASSOCIATION RELATIONSHIPS ---
+' --- COMPOSICION ---
 SnakeGamePanel *-- Snake : contiene
 SnakeGamePanel *-- Food : contiene
 SnakeGamePanel *-- Boost : contiene
 
-' --- NAVIGATION BETWEEN CLASSES ---
+' --- NAVEGACION ---
 MainMenu ..> SnakeGamePanel : crea
 SnakeGamePanel ..> MainMenu : crea
 
