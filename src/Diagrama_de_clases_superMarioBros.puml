@@ -1,4 +1,4 @@
-@startuml Mario Bros Complete - Simple
+@startuml Diagrama de clases Super Mario Bros.
 
 package "models.menus" {
 
