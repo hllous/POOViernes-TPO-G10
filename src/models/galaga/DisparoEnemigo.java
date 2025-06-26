@@ -16,10 +16,6 @@ public class DisparoEnemigo{
         this.y = y;
     }
 
-    public void destruir() {
-        this.activo = false;
-    }
-
     public void mover() {
         y += velocidad;
         if (y > 1200) activo = false; // Cambié por un valor fijo más grande para pantallas grandes

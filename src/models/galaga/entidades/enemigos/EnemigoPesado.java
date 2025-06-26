@@ -4,13 +4,22 @@ import javax.swing.*;
 import java.awt.*;
 
 public class EnemigoPesado extends Enemigo {
-    // Tamaño aumentado
-    private static final int ANCHO = 120;
-    private static final int ALTO = 100;
+    private int ancho = 120;
+    private int alto = 100;
+    private Image textura;
 
     public EnemigoPesado(int x, int y) {
         super(x, y, 1, "/resources/enemigo3.png");
         this.vida = 2;
+        cargarTextura();
+    }
+
+    private void cargarTextura() {
+        try {
+            textura = new ImageIcon(getClass().getResource("/assets/galaga/enemigo2.png")).getImage();
+        } catch (Exception e) {
+            System.err.println("No se pudo cargar enemigo2.png");
+        }
     }
 
     @Override
@@ -23,31 +32,21 @@ public class EnemigoPesado extends Enemigo {
 
     @Override
     public int getAncho() {
-        return ANCHO;
+        return ancho;
     }
 
     @Override
     public int getAlto() {
-        return ALTO;
-    }
-
-    private static Image img;
-
-    static {
-        try {
-            img = new ImageIcon(EnemigoBasico.class.getResource("/assets/galaga/enemigo2.png")).getImage();
-        } catch (Exception e) {
-            System.err.println("No se pudo cargar enemigo1.png");
-        }
+        return alto;
     }
 
     @Override
     public void dibujar(Graphics g) {
-        if (img != null) {
-            g.drawImage(img, x, y, ANCHO, ALTO, null);
+        if (textura != null) {
+            g.drawImage(textura, x, y, ancho, alto, null);
         } else {
             g.setColor(getColor());
-            g.fillRect(x, y, ANCHO, ALTO);
+            g.fillRect(x, y, ancho, alto);
         }
     }
 

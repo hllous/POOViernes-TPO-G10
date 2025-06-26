@@ -4,12 +4,21 @@ import javax.swing.*;
 import java.awt.*;
 
 public class EnemigoRapido extends Enemigo {
-    // Tamaño aumentado
-    private static final int ANCHO = 80;
-    private static final int ALTO = 65;
+    private int ancho = 80;
+    private int alto = 65;
+    private Image textura;
 
     public EnemigoRapido(int x, int y) {
         super(x, y, 4, null); // no usa imagen
+        cargarTextura();
+    }
+
+    private void cargarTextura() {
+        try {
+            textura = new ImageIcon(getClass().getResource("/assets/galaga/enemigo3.png")).getImage();
+        } catch (Exception e) {
+            System.err.println("No se pudo cargar enemigo3.png");
+        }
     }
 
     @Override
@@ -22,31 +31,21 @@ public class EnemigoRapido extends Enemigo {
 
     @Override
     public int getAncho() {
-        return ANCHO;
+        return ancho;
     }
 
     @Override
     public int getAlto() {
-        return ALTO;
-    }
-
-    private static Image img;
-
-    static {
-        try {
-            img = new ImageIcon(EnemigoBasico.class.getResource("/assets/galaga/enemigo3.png")).getImage();
-        } catch (Exception e) {
-            System.err.println("No se pudo cargar enemigo1.png");
-        }
+        return alto;
     }
 
     @Override
     public void dibujar(Graphics g) {
-        if (img != null) {
-            g.drawImage(img, x, y, ANCHO, ALTO, null);
+        if (textura != null) {
+            g.drawImage(textura, x, y, ancho, alto, null);
         } else {
             g.setColor(getColor());
-            g.fillRect(x, y, ANCHO, ALTO);
+            g.fillRect(x, y, ancho, alto);
         }
     }
 

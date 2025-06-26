@@ -7,28 +7,27 @@ public class Jugador {
     public int x, y;
     private int velocidad = 10;
     private int limitePantalla = 800; // Valor predeterminado
-    private static Image textura;
+    private Image textura;
 
-    // Tamaño aumentado del jugador
-    private static final int ANCHO = 100;
-    private static final int ALTO = 100;
+    /// Tamaño del jugador
+    private final int ancho = 100;
+    private final int alto = 100;
 
-    static {
+    public Jugador(int x, int y) {
+        this.x = x;
+        this.y = y;
+        cargarTextura();
+    }
+
+    private void cargarTextura() {
         try {
-            textura = new ImageIcon(Jugador.class.getResource("/assets/galaga/jugador.png"))
-                    .getImage()
-                    .getScaledInstance(ANCHO, ALTO, Image.SCALE_SMOOTH);
+            ImageIcon icon = new ImageIcon(getClass().getResource("/assets/galaga/jugador.png"));
+            textura = icon.getImage().getScaledInstance(ancho, alto, Image.SCALE_SMOOTH);
         } catch (Exception e) {
             System.err.println("No se pudo cargar la imagen del jugador.");
         }
     }
 
-    public Jugador(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
-
-    // Método para establecer el límite de la pantalla (ancho)
     public void setLimitePantalla(int ancho) {
         this.limitePantalla = ancho;
     }
@@ -40,27 +39,23 @@ public class Jugador {
 
     public void moverDerecha() {
         x += velocidad;
-        if (x > limitePantalla - ANCHO) x = limitePantalla - ANCHO;
+        if (x > limitePantalla - ancho) x = limitePantalla - ancho;
     }
 
-    public static Image getIcono() {
-        return textura;
-    }
-
-    public static Image getTextura() {
+    public Image getTextura() {
         return textura;
     }
 
     public Rectangle getBounds() {
-        return new Rectangle(x, y, ANCHO, ALTO);
+        return new Rectangle(x, y, ancho, alto);
     }
 
     public int getAncho() {
-        return ANCHO;
+        return ancho;
     }
 
     public int getAlto() {
-        return ALTO;
+        return alto;
     }
 
     public void dibujar(Graphics g) {
@@ -68,7 +63,7 @@ public class Jugador {
             g.drawImage(textura, x, y, null);
         } else {
             g.setColor(Color.GREEN);
-            g.fillRect(x, y, ANCHO, ALTO);
+            g.fillRect(x, y, ancho, alto);
         }
     }
 }

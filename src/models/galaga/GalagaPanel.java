@@ -13,17 +13,16 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Random;
 
-public class GalagaPanel extends JPanel implements Runnable, KeyListener, ActionListener{
+public class GalagaPanel extends JPanel implements Runnable, KeyListener, ActionListener, IMenu {
 
     /// Componentes Menu
     private JPanel menuPausa;
     private JPanel menuGameOver;
     private JButton btnReanudar, btnReiniciar, btnSalir;
     private JButton btnReiniciarGameOver, btnSalirGameOver;
+    private JLabel scoreLabel; // Referencia directa al label del puntaje
     private Timer repaintTimer;
-    private Random random = new Random();
 
     /// Componentes juego
     private JFrame frame;
@@ -32,67 +31,72 @@ public class GalagaPanel extends JPanel implements Runnable, KeyListener, Action
     private boolean pausado = false;
     private boolean gameOver = false;
 
-    // Elementos del juego
+    /// Componentes del entidades
     private Jugador jugador;
     private ArrayList<Disparo> disparos;
     private ArrayList<Enemigo> enemigos;
     private ArrayList<DisparoEnemigo> disparosEnemigos;
     private boolean izquierda, derecha, disparar;
     private int contadorSpawn = 0;
+    private int delaySpawn = 180;
     private int score = 0;
     private int vidas = 3;
-    private int delaySpawn = 180;
 
-    // Estrellas del fondo (ahora FondoGalaga)
+    /// Componentes para el fondo, en menu y en juego
     private FondoGalaga[] estrellas;
-    private final int NUM_ESTRELLAS = 200; // Más estrellas durante el juego
+    private final int cantidadEstrellas = 200;
 
     /// Constructor
     public GalagaPanel(JFrame frame) {
         this.frame = frame;
+        configurarPanel();
+        inicializarJuego();
+        iniciarTimers();
+    }
+
+    private void configurarPanel() {
         Dimension screenSize = frame.getSize();
         setPreferredSize(screenSize);
         setSize(screenSize);
         setLayout(null);
         setBackground(Color.BLACK);
-
-        // Inicializar estrellas
-        inicializarEstrellas();
-
-        // Inicializar componentes del juego
-        reiniciarJuego();
-
-        // Crear menus
-        crearMenuPausa();
-        crearMenuGameOver();
-
-        // Configurar panel
         setFocusable(true);
         addKeyListener(this);
         requestFocusInWindow();
+    }
 
-        // Timer para repintar y animar estrellas
+    private void inicializarJuego() {
+        /// Inicializar componentes del juego
+        inicializarEstrellas();
+        reiniciarJuego();
+
+        /// Creo menus
+        crearMenuPausa();
+        crearMenuGameOver();
+    }
+
+    private void iniciarTimers() {
+        /// Timer para repaint y animación de fondo
         repaintTimer = new Timer(40, e -> {
             actualizarEstrellas();
             repaint();
         });
         repaintTimer.start();
 
-        // Iniciar juego
         startGame();
     }
 
-    private void inicializarEstrellas() {
-        estrellas = new FondoGalaga[NUM_ESTRELLAS];
-        Dimension screenSize = getSize();
-        int ancho = screenSize.width > 0 ? screenSize.width : 800;
-        int alto = screenSize.height > 0 ? screenSize.height : 600;
+    /// ----- Métodos para crear el fondo -----
 
-        for (int i = 0; i < NUM_ESTRELLAS; i++) {
+    private void inicializarEstrellas() {
+        estrellas = new FondoGalaga[cantidadEstrellas];
+        int ancho = getWidth();
+        int alto = getHeight();
+
+        for (int i = 0; i < cantidadEstrellas; i++) {
             estrellas[i] = new FondoGalaga(ancho, alto);
         }
     }
-
 
     private void actualizarEstrellas() {
         if (estrellas == null) {
@@ -100,13 +104,14 @@ public class GalagaPanel extends JPanel implements Runnable, KeyListener, Action
             return;
         }
 
-        int alto = getHeight() > 0 ? getHeight() : 600;
-        int ancho = getWidth() > 0 ? getWidth() : 800;
+        int alto = getHeight();
+        int ancho = getWidth();
 
         for (FondoGalaga e : estrellas) {
             e.mover(alto, ancho);
         }
     }
+
     /// ----- COMPONENTES MENU -----
 
     /// Menu pausa
@@ -117,29 +122,31 @@ public class GalagaPanel extends JPanel implements Runnable, KeyListener, Action
         menuPausa.setBounds(0, 0, getWidth(), getHeight());
         menuPausa.setVisible(false);
 
-        menuPausa.add(Box.createVerticalStrut(200));
+        // Título
         JLabel titleLabel = new JLabel("PAUSA");
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         titleLabel.setFont(loadFont(50f));
         titleLabel.setForeground(Color.WHITE);
         titleLabel.setOpaque(false);
-        menuPausa.add(titleLabel);
 
-        menuPausa.add(Box.createVerticalStrut(50));
-
+        // Botones
         btnReanudar = crearBotonMenu("Reanudar");
         btnReiniciar = crearBotonMenu("Reiniciar");
         btnSalir = crearBotonMenu("Salir");
 
+        btnReanudar.addActionListener(this);
+        btnReiniciar.addActionListener(this);
+        btnSalir.addActionListener(this);
+
+        // Añadir componentes al panel
+        menuPausa.add(Box.createVerticalStrut(200));
+        menuPausa.add(titleLabel);
+        menuPausa.add(Box.createVerticalStrut(50));
         menuPausa.add(btnReanudar);
         menuPausa.add(Box.createVerticalStrut(15));
         menuPausa.add(btnReiniciar);
         menuPausa.add(Box.createVerticalStrut(15));
         menuPausa.add(btnSalir);
-
-        btnReanudar.addActionListener(this);
-        btnReiniciar.addActionListener(this);
-        btnSalir.addActionListener(this);
 
         add(menuPausa);
     }
@@ -152,34 +159,35 @@ public class GalagaPanel extends JPanel implements Runnable, KeyListener, Action
         menuGameOver.setBounds(0, 0, getWidth(), getHeight());
         menuGameOver.setVisible(false);
 
-        menuGameOver.add(Box.createVerticalStrut(200));
+        // Título Game Over
         JLabel titleLabel = new JLabel("GAME OVER");
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         titleLabel.setFont(loadFont(50f));
         titleLabel.setForeground(Color.RED);
         titleLabel.setOpaque(false);
-        menuGameOver.add(titleLabel);
 
-        // Puntaje
-        JLabel scoreLabel = new JLabel("Puntaje: 0");
-        scoreLabel.setName("scoreLabel"); // Para actualizarlo después
+        // Label de puntuación - guardamos referencia para actualizar fácilmente
+        scoreLabel = new JLabel("Puntaje: 0");
         scoreLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         scoreLabel.setFont(loadFont(30f));
         scoreLabel.setForeground(Color.WHITE);
         scoreLabel.setOpaque(false);
-        menuGameOver.add(scoreLabel);
 
-        menuGameOver.add(Box.createVerticalStrut(50));
-
+        // Botones
         btnReiniciarGameOver = crearBotonMenu("Reiniciar");
         btnSalirGameOver = crearBotonMenu("Salir");
 
+        btnReiniciarGameOver.addActionListener(this);
+        btnSalirGameOver.addActionListener(this);
+
+        // Añadir componentes al panel
+        menuGameOver.add(Box.createVerticalStrut(200));
+        menuGameOver.add(titleLabel);
+        menuGameOver.add(scoreLabel);
+        menuGameOver.add(Box.createVerticalStrut(50));
         menuGameOver.add(btnReiniciarGameOver);
         menuGameOver.add(Box.createVerticalStrut(15));
         menuGameOver.add(btnSalirGameOver);
-
-        btnReiniciarGameOver.addActionListener(this);
-        btnSalirGameOver.addActionListener(this);
 
         add(menuGameOver);
     }
@@ -221,7 +229,7 @@ public class GalagaPanel extends JPanel implements Runnable, KeyListener, Action
         button.setOpaque(false);
         button.setContentAreaFilled(false);
 
-        // Efecto al pasar el mouse
+        /// Efecto al pasar el mouse
         button.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent evt) {
@@ -251,8 +259,6 @@ public class GalagaPanel extends JPanel implements Runnable, KeyListener, Action
         }
     }
 
-    /// ----- FIN COMPONENTES MENU -----
-
     /// ----- COMPONENTES JUEGO -----
 
     public void startGame() {
@@ -264,13 +270,13 @@ public class GalagaPanel extends JPanel implements Runnable, KeyListener, Action
     }
 
     private void reiniciarJuego() {
-        // Calcular posición inicial del jugador y tamaño de pantalla
+        // Posición inicial del jugador y tamaño de pantalla
         Dimension screenSize = getSize();
-        int centerX = screenSize.width / 2 - 50; // La mitad del ancho del jugador (100/2)
-        int bottomY = screenSize.height - 150; // Un poco más arriba para que sea más visible
+        int centerX = screenSize.width / 2 - 50;
+        int bottomY = screenSize.height - 150;
 
         jugador = new Jugador(centerX, bottomY);
-        jugador.setLimitePantalla(screenSize.width); // Configurar límite de pantalla para el movimiento
+        jugador.setLimitePantalla(screenSize.width);
 
         disparos = new ArrayList<>();
         enemigos = new ArrayList<>();
@@ -283,72 +289,54 @@ public class GalagaPanel extends JPanel implements Runnable, KeyListener, Action
 
     @Override
     public void run() {
-        // Bucle principal del juego
-        long lastTime = System.nanoTime();
-        double amountOfTicks = 60.0;
-        double ns = 1000000000 / amountOfTicks;
-        double delta = 0;
-
         while (running) {
-            long now = System.nanoTime();
-            delta += (now - lastTime) / ns;
-            lastTime = now;
-
-            while (delta >= 1) {
-                if (!pausado && !gameOver) {
-                    actualizar();
-                }
-                delta--;
+            if (!pausado && !gameOver) {
+                actualizar();
             }
 
-            // El repintado se maneja con el Timer de Swing
             try {
-                Thread.sleep(16);  // ~60 FPS
+                Thread.sleep(16); // 60 FPS
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
     }
 
-    // En el método actualizar() de GalagaPanel, necesitamos actualizar las colisiones:
-
+    /// Actualizo los movimientos y las colisiones:
     private void actualizar() {
-        // Movimiento del jugador
+        actualizarJugador();
+        actualizarDisparos();
+        generarEnemigos();
+        actualizarEnemigos();
+        comprobarColisiones();
+    }
+
+    private void actualizarJugador() {
+        /// Movimiento del jugador
         if (izquierda) jugador.moverIzquierda();
         if (derecha) jugador.moverDerecha();
 
-        // Disparar (al centro)
+        /// Disparo
         if (disparar) {
             disparos.add(new Disparo(jugador.x + jugador.getAncho()/2 - 4, jugador.y));
             disparar = false;
         }
-
-        // Actualizar y filtrar disparos activos
-        actualizarDisparos();
-
-        // Generar enemigos según tiempo
-        generarEnemigos();
-
-        // Actualizar enemigos
-        actualizarEnemigos();
-
-        // Comprobar colisiones
-        comprobarColisiones();
     }
 
     private void actualizarDisparos() {
-        // Actualizar disparos del jugador
+        /// Actualizo disparos del jugador
+
         disparos.removeIf(disparo -> {
             disparo.mover();
             return !disparo.estaActivo();
         });
 
-        // Actualizar disparos enemigos
+        /// Actualizo disparos enemigos
         disparosEnemigos.removeIf(disparo -> {
             disparo.mover();
             if (!disparo.estaActivo()) return true;
 
-            // Comprobar colisiones con el jugador
+            /// Comprobar colisiones con el jugador
             if (disparo.getBounds().intersects(jugador.getBounds())) {
                 vidas--;
                 if (vidas <= 0) {
@@ -363,23 +351,11 @@ public class GalagaPanel extends JPanel implements Runnable, KeyListener, Action
     private void generarEnemigos() {
         contadorSpawn++;
         if (contadorSpawn > delaySpawn) {
-            int tipo = (int) (Math.random() * 3);
-            int x = (int) (Math.random() * (getWidth() - 120));
-            int y = 50 + (int) (Math.random() * 150);
-
-            switch (tipo) {
-                case 0 -> enemigos.add(new EnemigoBasico(x, y));
-                case 1 -> enemigos.add(new EnemigoRapido(x, y));
-                case 2 -> enemigos.add(new EnemigoPesado(x, y));
-            }
-
+            spawnNewEnemigo();
             contadorSpawn = 0;
-            if (delaySpawn > 60) {
-                delaySpawn -= 5;
-            }
         }
 
-        // Generar disparos enemigos
+        /// Genero disparos de los enemigos
         for (Enemigo e : enemigos) {
             if (Math.random() < 0.005) {
                 disparosEnemigos.add(new DisparoEnemigo(e.getX() + e.getAncho()/2 - 4, e.getY() + e.getAlto()));
@@ -387,8 +363,21 @@ public class GalagaPanel extends JPanel implements Runnable, KeyListener, Action
         }
     }
 
+    private void spawnNewEnemigo() {
+        int tipo = (int) (Math.random() * 3);
+        int x = (int) (Math.random() * (getWidth() - 120));
+        int y = 50 + (int) (Math.random() * 150);
+
+        switch (tipo) {
+            case 0 -> enemigos.add(new EnemigoBasico(x, y));
+            case 1 -> enemigos.add(new EnemigoRapido(x, y));
+            case 2 -> enemigos.add(new EnemigoPesado(x, y));
+        }
+    }
+
     private void actualizarEnemigos() {
-        // Filtrar enemigos inactivos y actualizar los activos
+        /// Actualizo los enemigos que no están eliminados
+
         enemigos.removeIf(enemigo -> {
             enemigo.mover();
             return !enemigo.estaActivo();
@@ -396,43 +385,24 @@ public class GalagaPanel extends JPanel implements Runnable, KeyListener, Action
     }
 
     private void comprobarColisiones() {
-        // Colisiones de disparos con enemigos
+        /// Colisiones de disparos con enemigos
         for (Disparo d : disparos) {
             Rectangle rectDisparo = d.getBounds();
             for (Enemigo e : enemigos) {
                 if (e.estaActivo() && rectDisparo.intersects(e.getBounds())) {
                     e.recibirDaño(1);
-                    d.desactivar(); // Usar método en vez de manipular directamente
+                    d.desactivar();
                     score += 10;
                 }
-            }
-        }
-
-        // Colisiones del jugador con enemigos (game over)
-        for (Enemigo e : enemigos) {
-            if (e.getBounds().intersects(jugador.getBounds()) ||
-                    e.getY() + e.getAlto() >= getHeight()) {
-                activarGameOver();
-                return;
             }
         }
     }
 
     private void activarGameOver() {
         gameOver = true;
-
-        // Actualizar etiqueta de puntuación
-        for (Component c : menuGameOver.getComponents()) {
-            if (c instanceof JLabel && "scoreLabel".equals(c.getName())) {
-                ((JLabel) c).setText("Puntaje: " + score);
-                break;
-            }
-        }
-
+        scoreLabel.setText("Puntaje: " + score);
         menuGameOver.setVisible(true);
     }
-
-    /// ----- FIN COMPONENTES JUEGO -----
 
     /// ----- COMPONENTES SWING -----
 
@@ -450,77 +420,73 @@ public class GalagaPanel extends JPanel implements Runnable, KeyListener, Action
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+        dibujarFondo(g);
+        dibujarElementosJuego(g);
+        dibujarInterfazUsuario(g);
+    }
 
-        // Fondo negro
+    private void dibujarFondo(Graphics g) {
+
+        /// Fondo negro
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, getWidth(), getHeight());
 
-        // Dibujar estrellas
+        /// Dibujo las estrellas
         if (estrellas != null) {
             for (FondoGalaga e : estrellas) {
                 e.dibujar(g);
             }
         }
+    }
 
-        // Dibujar elementos del juego
-        if (!gameOver && jugador != null) {
-            jugador.dibujar(g);
+    private void dibujarElementosJuego(Graphics g) {
+        if (gameOver || jugador == null) return;
 
-            // Dibujar disparos
-            for (Disparo d : disparos) {
-                d.dibujar(g);
-            }
+        /// Dibujo jugador
+        jugador.dibujar(g);
 
-            // Dibujar enemigos
-            for (Enemigo e : enemigos) {
-                e.dibujar(g);
-            }
-
-            // Dibujar disparos enemigos
-            for (DisparoEnemigo d : disparosEnemigos) {
-                d.dibujar(g);
-            }
+        /// Dibujo disparos
+        for (Disparo d : disparos) {
+            d.dibujar(g);
         }
 
-        // Información del jugador
-        g.setColor(Color.WHITE);
-        g.setFont(loadFont(20f));
-        g.drawString("Puntuación: " + score, 20, 30);
-
-        // Vidas
-        g.drawString("Vidas: " + vidas, 20, 60);
-
-        // En el método paintComponent
-        // Mostrar icono de vidas
-        Image iconoVida = Jugador.getTextura();
-        if (iconoVida != null) {
-            for (int i = 0; i < vidas; i++) {
-                g.drawImage(iconoVida, getWidth() - (i + 1) * 60, 10, 50, 50, null); // Iconos más grandes
-            }
+        /// Dibujo enemigos
+        for (Enemigo e : enemigos) {
+            e.dibujar(g);
         }
 
-        // Fondo semi-transparente para los menús
-        if (pausado || gameOver) {
-            g.setColor(new Color(0, 0, 0, 150));
-            g.fillRect(0, 0, getWidth(), getHeight());
+        /// Dibujo disparos enemigos
+        for (DisparoEnemigo d : disparosEnemigos) {
+            d.dibujar(g);
         }
     }
 
-    @Override
-    public void keyTyped(KeyEvent e) {
-        // No se utiliza
+    private void dibujarInterfazUsuario(Graphics g) {
+        /// Información del jugador
+        g.setColor(Color.WHITE);
+        g.setFont(loadFont(20f));
+        g.drawString("Puntuación: " + score, 20, 30);
+        g.drawString("Vidas: " + vidas, 20, 60);
+
+        /// Mostrar vidas
+        Image iconoVida = new ImageIcon(getClass().getResource("/assets/galaga/jugador.png")).getImage();
+        if (iconoVida != null) {
+            for (int i = 0; i < vidas; i++) {
+                g.drawImage(iconoVida, getWidth() - (i + 1) * 60, 10, 50, 50, null);
+            }
+        }
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
 
+        /// Chequeo si esta pausado
+
         if (key == KeyEvent.VK_ESCAPE && !gameOver) {
             pausado = !pausado;
             menuPausa.setVisible(pausado);
-            if (pausado) {
-                repaint(); // Asegurar que se pinte el menú
-            }
+
         } else if (!pausado && !gameOver) {
             if (key == KeyEvent.VK_LEFT) {
                 izquierda = true;
@@ -543,18 +509,8 @@ public class GalagaPanel extends JPanel implements Runnable, KeyListener, Action
         }
     }
 
-    /// ----- FIN COMPONENTES SWING -----
 
-    // Para asegurar que las estrellas se inicializan correctamente cuando el panel se muestra
+    /// Tengo que agregar este metodo, aunque no lo uso, por la interfaz
     @Override
-    public void addNotify() {
-        super.addNotify();
-
-        // Inicializar estrellas cuando el panel se añade a la jerarquía
-        SwingUtilities.invokeLater(() -> {
-            if (estrellas == null || getWidth() > 0 && estrellas[0].x > getWidth()) {
-                inicializarEstrellas();
-            }
-        });
-    }
+    public void keyTyped(KeyEvent e) {}
 }

@@ -296,7 +296,7 @@ GalagaMenu *-- FondoGalaga : contiene
 GalagaPanel ..> EstadoJuego : usa
 
 ' --- INTERACTION RELATIONSHIPS ---
-Disparo ..> models.galaga.entidades.enemigos.Enemigo : interactúa con
-DisparoEnemigo ..> Jugador : interactúa con
+Disparo ..> models.galaga.entidades.enemigos.Enemigo : interactua con
+DisparoEnemigo ..> Jugador : interactua con
 
 @enduml

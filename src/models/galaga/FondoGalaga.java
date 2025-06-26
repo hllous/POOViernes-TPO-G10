@@ -12,29 +12,23 @@ public class FondoGalaga {
     public float velocidad;
 
     public FondoGalaga(int ancho, int alto) {
-        reiniciar(ancho, alto);
-        // Posición inicial aleatoria en y
+        reiniciar(ancho);
+        /// Posición inicial aleatoria en y
         y = random.nextInt(alto);
     }
 
-    public void reiniciar(int ancho, int alto) {
-        x = random.nextInt(ancho > 0 ? ancho : 800);
+    public void reiniciar(int ancho) {
+        x = random.nextInt(ancho);
         y = -5;
-        tamaño = random.nextInt(3) + 1;
-        velocidad = tamaño; // Simplificado: el tamaño determina la velocidad directamente
-
-        // Simplificación de colores: blanco o azul claro
-        if (random.nextBoolean()) {
-            color = Color.WHITE;
-        } else {
-            color = new Color(200, 200, 255); // Azul claro simplificado
-        }
+        tamaño = 2;
+        velocidad = 2;
+        color = Color.WHITE;
     }
 
     public void mover(int alto, int ancho) {
         y += velocidad;
         if (y > alto) {
-            reiniciar(ancho, alto);
+            reiniciar(ancho);
         }
     }
 

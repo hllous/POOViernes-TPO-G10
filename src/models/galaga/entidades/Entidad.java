@@ -4,16 +4,16 @@ import interfaces.galaga.IEntidad;
 
 public abstract class Entidad implements IEntidad {
     protected int x, y;
-    protected boolean activa;
+    protected boolean activo;
 
     public Entidad(int x, int y) {
         this.x = x;
         this.y = y;
-        this.activa = true;
+        this.activo = true;
     }
 
     public abstract void mover();
     public boolean estaActiva() {
-        return activa;
+        return activo;
     }
 }
