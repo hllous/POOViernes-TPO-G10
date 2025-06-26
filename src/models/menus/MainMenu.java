@@ -14,7 +14,7 @@ public class MainMenu extends JPanel implements ActionListener, IMenu {
     /// Componentes swing
     private JFrame frame;
     private JButton snakeBoton;
-    private JButton flappyBoton;
+    private JButton galagaButton;
     private JButton marioBrosBoton;
     private JButton exitBoton;
 
@@ -58,13 +58,13 @@ public class MainMenu extends JPanel implements ActionListener, IMenu {
         add(Box.createVerticalStrut(30));
 
         snakeBoton = crearBotonMenu("Snake Game");
-        flappyBoton = crearBotonMenu("Flappy Bird");
+        galagaButton = crearBotonMenu("Galaga");
         marioBrosBoton = crearBotonMenu("Super Mario Bros.");
         exitBoton = crearBotonMenu("Salir");
 
         add(snakeBoton);
         add(Box.createVerticalStrut(15));
-        add(flappyBoton);
+        add(galagaButton);
         add(Box.createVerticalStrut(15));
         add(marioBrosBoton);
         add(Box.createVerticalStrut(15));
@@ -75,7 +75,7 @@ public class MainMenu extends JPanel implements ActionListener, IMenu {
         /// Veo si pasan el mouse por arriba de los botones
 
         snakeBoton.addActionListener(this);
-        flappyBoton.addActionListener(this);
+        galagaButton.addActionListener(this);
         marioBrosBoton.addActionListener(this);
         exitBoton.addActionListener(this);
 
@@ -164,29 +164,23 @@ public class MainMenu extends JPanel implements ActionListener, IMenu {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == snakeBoton) {
-
             JOptionPane.showMessageDialog(this, "Snake Game se implementará próximamente.");
+        } else if (e.getSource() == galagaButton) {
             backgroundMusic.stop();
             backgroundMusic.close();
             repaintTimer.stop();
-
-        } else if (e.getSource() == flappyBoton) {
-
-            JOptionPane.showMessageDialog(this, "Flappy Bird se implementará próximamente.");
+            frame.setContentPane(new GalagaMenu(frame));
+            frame.revalidate();
 
         } else if (e.getSource() == marioBrosBoton) {
-
             backgroundMusic.stop();
             backgroundMusic.close();
             repaintTimer.stop();
             frame.setContentPane(new MarioBrosMenu(frame));
             frame.revalidate();
-
         } else if (e.getSource() == exitBoton) {
-
             System.exit(0);
         }
-
     }
 
     @Override
