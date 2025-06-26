@@ -65,24 +65,30 @@ public class Mario implements IEntidad {
         poscionYMario += dy;
         for (Bloque bloque : bloques) {
             if (chocoConBloque(bloque)) {
-                // MANEJO ESPECIAL PARA BLOQUES PREGUNTA
+                /// MANEJO ESPECIAL PARA BLOQUES PREGUNTA
                 if (bloque instanceof BloquePregunta) {
+
+
                     BloquePregunta pregunta = (BloquePregunta) bloque;
 
                     if (dy > 0 && pregunta.puedePararse(this)) {
-                        // Mario cayendo sobre el bloque - puede pararse
+                        /// Mario cayendo sobre el bloque
                         poscionYMario = bloque.getY() - alto;
                         dy = 0;
                         enElAire = false;
                         saltando = false;
                     } else if (dy < 0) {
-                        // Mario saltando hacia arriba - golpea desde abajo
+                        /// Mario saltando hacia arriba - golpea desde abajo
                         poscionYMario = bloque.getY() + bloque.getAlto();
                         dy = 0;
-                        // La moneda se da en alColisionar automáticamente
+                        /// La moneda se da en alColisionar automáticamente
                     }
+
+
                 } else if (dy > 0) {
-                    // Bloques normales
+
+                    /// Bloques normales
+
                     poscionYMario = bloque.getY() - alto;
                     dy = 0;
                     enElAire = false;
@@ -120,8 +126,9 @@ public class Mario implements IEntidad {
 
     private boolean chocoConBloque(Bloque bloque) {
         if (getBounds().intersects(bloque.getBounds())) {
-            // VERIFICAR BLOQUES ESPECIALES - SIMPLE
+
             String tipoBloque = bloque.getClass().getSimpleName();
+
             if (tipoBloque.equals("BloqueVictoria")) {
                 tocoBloqueVictoria = true;
             } else if (tipoBloque.equals("BloqueMortal")) {
@@ -139,7 +146,6 @@ public class Mario implements IEntidad {
         int drawX = (int) (posicionXMario - camaraX);
         int drawY = (int) (poscionYMario - camaraY);
 
-        // Dibujar GIF de Mario
         gifMario.paintIcon(null, g, drawX, drawY);
     }
 
@@ -170,9 +176,7 @@ public class Mario implements IEntidad {
     public int getAlto() { return alto; }
 
     @Override
-    public void mover() {
-
-    }
+    public void mover() {}
 
     public double getX() { return dx; }
     public double getY() { return dy; }

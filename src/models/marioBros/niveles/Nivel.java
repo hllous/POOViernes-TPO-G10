@@ -94,15 +94,18 @@ public abstract class Nivel {
     protected abstract void inicializarEntidades();
 
     public void actualizar() {
+
+        /// Le pasoo los bloques para verificar colisiones
+
         mario.mover(bloques);
 
-        // Configurar bloques para enemigos y moverlos
         for (Enemigo enemigo : enemigos) {
             enemigo.setBloques(bloques);
             enemigo.mover();
         }
 
-        // NUEVA LÓGICA DE COLISIÓN CON ENEMIGOS
+
+        /// Colision con enemigos
         Rectangle marioBounds = mario.getBounds();
         List<Enemigo> enemigosAEliminar = new ArrayList<>();
 
@@ -111,7 +114,6 @@ public abstract class Nivel {
                 boolean resultado = enemigo.verificarColisionConMario(marioBounds, mario.getY());
 
                 if (!resultado) {
-                    // Mario tocó por el lado = reiniciar
                     reiniciarNivel();
                     return;
                 } else if (enemigo.estaEliminado()) {
@@ -120,17 +122,23 @@ public abstract class Nivel {
             }
         }
 
-        // Remover enemigos eliminados
+        /// Elimino enemigos eliminados
         enemigos.removeAll(enemigosAEliminar);
 
-        // Código de cámara...
+        /// Panneo de la "camara" del jugador
         int centroVentana = ventala_ancho / 2;
         if (mario.getPosicionXMario() > centroVentana) {
+
             camaraX = mario.getPosicionXMario() - centroVentana;
+
             if (fondo != null && camaraX > fondo.getWidth() - ventala_ancho)
+
                 camaraX = fondo.getWidth() - ventala_ancho;
+
         } else {
+
             camaraX = 0;
+
         }
         if (camaraX < 0) camaraX = 0;
     }
@@ -154,20 +162,14 @@ public abstract class Nivel {
                 camaraX, 0, camaraX + ventala_ancho, ventana_alto,
                 null
         );
-        /*if (fondo != null) {
 
-        } else {
-            g.setColor(Color.CYAN);
-            g.fillRect(0, 0, panelWidth, panelHeight);
-        }*/
-
-        // Escalar gráficos
+        /// Escala de gráficos
         Graphics2D g2 = (Graphics2D) g.create();
         double escalaX = panelWidth / (double) ventala_ancho;
         double escalaY = panelHeight / (double) ventana_alto;
         g2.scale(escalaX, escalaY);
 
-        // Dibujar
+        /// Dibujar
         for (Bloque b : bloques) b.dibujar(g2, camaraX, 0);
         for (Enemigo e : enemigos) e.dibujar(g2, camaraX, 0);
         mario.dibujar(g2, camaraX, 0);
