@@ -115,14 +115,14 @@ public class MarioBrosPanel extends JPanel implements Runnable, KeyListener, Act
     /// Menu win
 
     private void crearMenuVictoria() {
-        // MENU DE VICTORIA - SIMPLE
+        /// MENU DE VICTORIA
         menuVictoria = new JPanel();
         menuVictoria.setLayout(new BoxLayout(menuVictoria, BoxLayout.Y_AXIS));
         menuVictoria.setOpaque(false);
         menuVictoria.setBounds(0, 0, getPreferredSize().width, getPreferredSize().height);
         menuVictoria.setVisible(false);
 
-        // Título "GANASTE"
+        /// Título "GANASTE"
         menuVictoria.add(Box.createVerticalStrut(200));
         JLabel titleLabel = new JLabel("¡GANASTE!");
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -131,7 +131,7 @@ public class MarioBrosPanel extends JPanel implements Runnable, KeyListener, Act
         titleLabel.setOpaque(false);
         menuVictoria.add(titleLabel);
 
-        // Botón volver al menú
+        /// Boton volver al menú
         menuVictoria.add(Box.createVerticalStrut(50));
         btnVolverMenu = crearBotonMenu("Volver al Menu");
         btnVolverMenu.addActionListener(this);
@@ -198,7 +198,6 @@ public class MarioBrosPanel extends JPanel implements Runnable, KeyListener, Act
             if (!pausado && !ganado) {
                 nivelActual.actualizar();
 
-                // VERIFICAR ESTADOS ESPECIALES - SIMPLE
                 if (nivelActual.getMario().getTocoBloqueMortal()) {
                     nivelActual.reiniciarNivel(); // Reiniciar por bloque mortal
                 }

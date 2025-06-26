@@ -54,17 +54,6 @@ public class Enemigo implements IEntidad {
         return true;
     }
 
-    private boolean esColisionDesdeArriba(Rectangle marioBounds, double marioVelocidadY) {
-        // Mario debe estar cayendo Y su centro debe estar arriba del enemigo
-        boolean marioCayendo = marioVelocidadY > 0;
-
-        double marioCentroY = marioBounds.y + (marioBounds.height / 2.0);
-        double enemigoCentroY = y + (alto / 2.0);
-        boolean marioArriba = marioCentroY < enemigoCentroY;
-
-        return marioCayendo && marioArriba;
-    }
-
     // ELIMINAR ENEMIGO
     public void eliminar() {
         eliminado = true;
