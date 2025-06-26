@@ -203,7 +203,6 @@ package "models.marioBros.entidades" {
         + dibujar(Graphics): void
         + setBloques(List<Bloque>): void
         + dibujar(Graphics, int, int): void
-        - esColisionDesdeArriba(Rectangle, double): boolean
     }
 }
 
