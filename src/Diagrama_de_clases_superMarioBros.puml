@@ -18,7 +18,7 @@ package "interfaces.marioBros" {
     }
 }
 
-' --- MODELS.MENUS PACKAGE DE MARIO BROS ---
+' --- MODELS.MENUS DE MARIO BROS ---
 package "models.menus" {
     class MainMenu {
         - JFrame: frame
@@ -54,7 +54,7 @@ package "models.menus" {
     }
 }
 
-' --- MODELS.MARIOBROS PACKAGE ---
+' --- MODELS.MARIOBROS ---
 package "models.marioBros" {
     class MarioBrosPanel {
         - menuPausa: JPanel
@@ -89,7 +89,7 @@ package "models.marioBros" {
     }
 }
 
-' --- MODELS.MARIOBROS.NIVELES PACKAGE ---
+' --- MODELS.MARIOBROS.NIVELES ---
 package "models.marioBros.niveles" {
     abstract class Nivel {
         # fondo: BufferedImage
@@ -131,7 +131,7 @@ package "models.marioBros.niveles" {
     }
 }
 
-' --- MODELS.MARIOBROS.ENTIDADES PACKAGE ---
+' --- MODELS.MARIOBROS.ENTIDADES ---
 package "models.marioBros.entidades" {
     class Mario {
         - posicionXMario: double
@@ -207,7 +207,7 @@ package "models.marioBros.entidades" {
     }
 }
 
-' --- MODELS.MARIOBROS.BLOQUES PACKAGE ---
+' --- MODELS.MARIOBROS.BLOQUES ---
 package "models.marioBros.bloques" {
     abstract class Bloque {
         # x: int
@@ -264,14 +264,14 @@ package "models.marioBros.bloques" {
     }
 }
 
-' --- IMPLEMENTATIONS OF INTERFACES ---
+' --- IMPLEMENTACIONES DE INTERFACES ---
 MainMenu ..|> IMenu
 MarioBrosMenu ..|> IMenu
 MarioBrosPanel ..|> IMenu
 Mario ..|> IEntidad
 Enemigo ..|> IEntidad
 
-' --- INHERITANCE RELATIONSHIPS ---
+' --- HERENCIAS ---
 Nivel1_1 --|> Nivel
 
 BloqueLadrillo --|> Bloque
@@ -280,13 +280,13 @@ BloquePregunta --|> Bloque
 BloqueTuberia --|> Bloque
 BloqueVictoria --|> Bloque
 
-' --- NAVIGATION BETWEEN CLASSES ---
+' --- COMO SE CREAN LAS CLASES ---
 MainMenu ..> MarioBrosMenu : crea
 MarioBrosMenu ..> MainMenu : crea
 MarioBrosMenu ..> MarioBrosPanel : crea
 MarioBrosPanel ..> MarioBrosMenu : crea
 
-' --- COMPOSITION RELATIONSHIPS ---
+' --- COMPOSICION ---
 MarioBrosPanel *-- Nivel : contiene
 Nivel *-- Mario : contiene
 Nivel *-- Enemigo : contiene

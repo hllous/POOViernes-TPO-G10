@@ -9,7 +9,7 @@ package "interfaces.menu" {
     }
 }
 
-' --- MODELS.MENUS PACKAGE ---
+' --- MODELS.MENUS ---
 package "models.menus" {
     class MainMenu {
         - frame: JFrame
@@ -30,7 +30,7 @@ package "models.menus" {
     }
 }
 
-' --- MODELOS SNAKE GAME PACKAGE ---
+' --- MODELS SNAKE GAME ---
 package "models.snakeGame" {
     class SnakeGamePanel {
         - TILE_SIZE: int

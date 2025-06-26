@@ -15,12 +15,10 @@ package "interfaces.galaga" {
         + dibujar(Graphics g)
         + getX(): int
         + getY(): int
-        + getAncho(): int
-        + getAlto(): int
     }
 }
 
-' --- MODELS.MENUS PACKAGE (RELATED TO GALAGA) ---
+' --- MODELS.MENUS ---
 package "models.menus" {
     class MainMenu {
         - frame: JFrame
@@ -60,7 +58,7 @@ package "models.menus" {
     }
 }
 
-' --- MODELS.GALAGA PACKAGE ---
+' --- MODELS.GALAGA ---
 package "models.galaga" {
     class GalagaPanel {
         - menuPausa: JPanel
@@ -70,8 +68,8 @@ package "models.galaga" {
         - btnSalir: JButton
         - btnReiniciarGameOver: JButton
         - btnSalirGameOver: JButton
+        - scoreLabel: JLabel
         - repaintTimer: Timer
-        - random: Random
         - frame: JFrame
         - gameThread: Thread
         - running: boolean
@@ -89,7 +87,7 @@ package "models.galaga" {
         - vidas: int
         - delaySpawn: int
         - estrellas: FondoGalaga[]
-        - NUM_ESTRELLAS: int
+        - cantidadEstrellas: int
 
         + GalagaPanel(JFrame)
         + startGame()
@@ -104,17 +102,24 @@ package "models.galaga" {
         + keyReleased(KeyEvent)
         + keyTyped(KeyEvent)
         # paintComponent(Graphics)
-        # addNotify()
+        - configurarPanel()
+        - inicializarJuego()
+        - iniciarTimers()
         - inicializarEstrellas()
         - actualizarEstrellas()
         - crearMenuPausa()
         - crearMenuGameOver()
         - actualizar()
+        - actualizarJugador()
         - actualizarDisparos()
         - actualizarEnemigos()
         - generarEnemigos()
+        - spawnNewEnemigo()
         - comprobarColisiones()
         - activarGameOver()
+        - dibujarFondo(Graphics)
+        - dibujarElementosJuego(Graphics)
+        - dibujarInterfazUsuario(Graphics)
     }
 
     class Disparo {
@@ -142,7 +147,6 @@ package "models.galaga" {
         - ALTO: int
 
         + DisparoEnemigo(int, int)
-        + destruir()
         + mover()
         + dibujar(Graphics)
         + estaActivo(): boolean
@@ -157,25 +161,18 @@ package "models.galaga" {
         + velocidad: float
 
         + FondoGalaga(int, int)
-        + reiniciar(int, int)
+        + reiniciar(int)
         + mover(int, int)
         + dibujar(Graphics)
     }
-
-    enum EstadoJuego {
-        MENU
-        JUGANDO
-        PAUSA
-        GAMEOVER
-    }
 }
 
-' --- MODELS.GALAGA.ENTIDADES PACKAGE ---
+' --- MODELS.GALAGA.ENTIDADES ---
 package "models.galaga.entidades" {
     abstract class Entidad {
         # x: int
         # y: int
-        # activa: boolean
+        # activo: boolean
 
         + Entidad(int, int)
         + {abstract} mover()
@@ -183,7 +180,7 @@ package "models.galaga.entidades" {
     }
 }
 
-' --- MODELS.GALAGA.ENTIDADES.JUGADOR PACKAGE ---
+' --- MODELS.GALAGA.ENTIDADES.JUGADOR ---
 package "models.galaga.entidades.jugador" {
     class Jugador {
         + x: int
@@ -191,23 +188,26 @@ package "models.galaga.entidades.jugador" {
         - velocidad: int
         - limitePantalla: int
         - textura: Image
-        - ANCHO: int
-        - ALTO: int
+        - ancho: int
+        - alto: int
 
         + Jugador(int, int)
+        - cargarTextura()
         + setLimitePantalla(int)
+        + mover()
         + moverIzquierda()
         + moverDerecha()
-        + getIcono(): Image
         + getTextura(): Image
         + getBounds(): Rectangle
         + getAncho(): int
         + getAlto(): int
         + dibujar(Graphics)
+        + getX(): int
+        + getY(): int
     }
 }
 
-' --- MODELS.GALAGA.ENTIDADES.ENEMIGOS PACKAGE ---
+' --- MODELS.GALAGA.ENTIDADES.ENEMIGOS ---
 package "models.galaga.entidades.enemigos" {
     abstract class Enemigo {
         # velocidad: int
@@ -216,38 +216,41 @@ package "models.galaga.entidades.enemigos" {
         # vida: int
 
         + Enemigo(int, int, int, String)
+        + {abstract} mover()
         + dibujar(Graphics)
         + getBounds(): Rectangle
-        + destruir()
         + estaActivo(): boolean
+        + recibirDaño(int)
         + getX(): int
-        + setX(int)
         + getY(): int
+        + setX(int)
         + setY(int)
         + {abstract} getAncho(): int
         + {abstract} getAlto(): int
         + {abstract} getColor(): Color
-        + recibirDaño(int)
     }
 
     class EnemigoBasico {
-        - ANCHO: int
-        - ALTO: int
-        - texturaCacheada: Image
+        - ancho: int
+        - alto: int
+        - textura: Image
 
         + EnemigoBasico(int, int)
+        - cargarTextura()
         + mover()
+        + dibujar(Graphics)
         + getAncho(): int
         + getAlto(): int
         + getColor(): Color
     }
 
     class EnemigoPesado {
-        - ANCHO: int
-        - ALTO: int
-        - img: Image
+        - ancho: int
+        - alto: int
+        - textura: Image
 
         + EnemigoPesado(int, int)
+        - cargarTextura()
         + mover()
         + getAncho(): int
         + getAlto(): int
@@ -256,11 +259,12 @@ package "models.galaga.entidades.enemigos" {
     }
 
     class EnemigoRapido {
-        - ANCHO: int
-        - ALTO: int
-        - img: Image
+        - ancho: int
+        - alto: int
+        - textura: Image
 
         + EnemigoRapido(int, int)
+        - cargarTextura()
         + mover()
         + getAncho(): int
         + getAlto(): int
@@ -269,34 +273,34 @@ package "models.galaga.entidades.enemigos" {
     }
 }
 
-' --- IMPLEMENTATIONS OF INTERFACES ---
+' --- IMPLEMENTACION DE INTERFACES ---
 MainMenu ..|> IMenu
 GalagaMenu ..|> IMenu
+GalagaPanel ..|> IMenu
+Jugador ..|> IEntidad
 models.galaga.entidades.Entidad ..|> interfaces.galaga.IEntidad
 models.galaga.entidades.enemigos.Enemigo --|> models.galaga.entidades.Entidad
 
-' --- INHERITANCE RELATIONSHIPS ---
-EnemigoBasico --|> models.galaga.entidades.enemigos.Enemigo
-EnemigoPesado --|> models.galaga.entidades.enemigos.Enemigo
-EnemigoRapido --|> models.galaga.entidades.enemigos.Enemigo
+' --- HERENCIAS ---
+EnemigoBasico --|> Enemigo
+EnemigoPesado --|> Enemigo
+EnemigoRapido --|> Enemigo
 
-' --- NAVIGATION BETWEEN CLASSES ---
+' ---  COMO SE CREAN LAS CLASES  ---
 MainMenu ..> GalagaMenu : crea
-GalagaMenu ..> MainMenu : crea
 GalagaMenu ..> GalagaPanel : crea
 GalagaPanel ..> GalagaMenu : crea
 
-' --- COMPOSITION & ASSOCIATION RELATIONSHIPS ---
+' --- COMPOSICION ---
 GalagaPanel *-- Jugador : contiene
 GalagaPanel *-- Disparo : contiene
-GalagaPanel *-- models.galaga.entidades.enemigos.Enemigo : contiene
+GalagaPanel *-- Enemigo : contiene
 GalagaPanel *-- DisparoEnemigo : contiene
 GalagaPanel *-- FondoGalaga : contiene
 GalagaMenu *-- FondoGalaga : contiene
-GalagaPanel ..> EstadoJuego : usa
 
 ' --- INTERACTION RELATIONSHIPS ---
-Disparo ..> models.galaga.entidades.enemigos.Enemigo : interactua con
+Disparo ..> Enemigo : interactua con
 DisparoEnemigo ..> Jugador : interactua con
 
 @enduml
