@@ -108,7 +108,7 @@ public abstract class Nivel {
 
         for (Enemigo enemigo : enemigos) {
             if (!enemigo.estaEliminado()) {
-                boolean resultado = enemigo.verificarColisionConMario(marioBounds, mario.getDy());
+                boolean resultado = enemigo.verificarColisionConMario(marioBounds, mario.getY());
 
                 if (!resultado) {
                     // Mario tocó por el lado = reiniciar

@@ -1,6 +1,8 @@
 package models.menus;
 
 import interfaces.menu.IMenu;
+import models.snakeGame.Snake;
+import models.snakeGame.SnakeGamePanel;
 
 import javax.sound.sampled.*;
 
@@ -164,8 +166,17 @@ public class MainMenu extends JPanel implements ActionListener, IMenu {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == snakeBoton) {
-            JOptionPane.showMessageDialog(this, "Snake Game se implementará próximamente.");
+
+            backgroundMusic.stop();
+            backgroundMusic.close();
+            repaintTimer.stop();
+            SnakeGamePanel snakePanel = new SnakeGamePanel(frame);
+            frame.setContentPane(snakePanel);
+            frame.revalidate();
+            snakePanel.requestFocusInWindow();
+
         } else if (e.getSource() == galagaButton) {
+
             backgroundMusic.stop();
             backgroundMusic.close();
             repaintTimer.stop();
@@ -173,11 +184,13 @@ public class MainMenu extends JPanel implements ActionListener, IMenu {
             frame.revalidate();
 
         } else if (e.getSource() == marioBrosBoton) {
+
             backgroundMusic.stop();
             backgroundMusic.close();
             repaintTimer.stop();
             frame.setContentPane(new MarioBrosMenu(frame));
             frame.revalidate();
+
         } else if (e.getSource() == exitBoton) {
             System.exit(0);
         }

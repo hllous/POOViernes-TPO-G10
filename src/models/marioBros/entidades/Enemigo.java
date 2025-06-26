@@ -77,10 +77,10 @@ public class Enemigo implements IEntidad {
 
     // IMPLEMENTACIÓN DE LA INTERFAZ IEntidad
     @Override
-    public int getX() { return (int) x; }
+    public double getX() { return (int) x; }
 
     @Override
-    public int getY() { return (int) y; }
+    public double getY() { return (int) y; }
 
     @Override
     public int getAncho() { return ancho; }
@@ -138,7 +138,6 @@ public class Enemigo implements IEntidad {
         }
     }
 
-    @Override
     public void dibujar(Graphics g) {
         dibujar(g, 0, 0);
     }

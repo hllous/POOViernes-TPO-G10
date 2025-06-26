@@ -3,12 +3,14 @@ package models.marioBros.entidades;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.List;
+
+import interfaces.marioBros.IEntidad;
 import models.marioBros.bloques.Bloque;
 import models.marioBros.bloques.BloquePregunta;
 
 import javax.swing.*;
 
-public class Mario {
+public class Mario implements IEntidad {
 
     /// Componentes mario
     private double posicionXMario, poscionYMario;
@@ -166,8 +168,14 @@ public class Mario {
     public int getPoscionYMario() { return (int) poscionYMario; }
     public int getAncho() { return ancho; }
     public int getAlto() { return alto; }
-    public double getDx() { return dx; }
-    public double getDy() { return dy; }
+
+    @Override
+    public void mover() {
+
+    }
+
+    public double getX() { return dx; }
+    public double getY() { return dy; }
     public boolean enElAire() { return enElAire; }
     public int getMonedas() { return monedas; }
     public boolean getTocoBloqueVictoria() { return tocoBloqueVictoria; }

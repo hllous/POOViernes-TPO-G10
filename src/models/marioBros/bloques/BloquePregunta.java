@@ -35,7 +35,7 @@ public class BloquePregunta extends Bloque {
 
         // Mario está debajo del bloque y subiendo
         boolean marioDebajo = marioBounds.y > bloqueBounds.y;
-        boolean marioSubiendo = mario.getDy() < 0; // Velocidad hacia arriba
+        boolean marioSubiendo = mario.getY() < 0; // Velocidad hacia arriba
 
         // La cabeza de Mario toca la parte inferior del bloque
         boolean tocaDesdeAbajo = marioBounds.y <= bloqueBounds.y + bloqueBounds.height;
@@ -52,7 +52,7 @@ public class BloquePregunta extends Bloque {
 
         // Mario puede pararse si viene desde arriba y está cayendo
         boolean marioArriba = marioBounds.y < bloqueBounds.y;
-        boolean marioCayendo = mario.getDy() >= 0;
+        boolean marioCayendo = mario.getY() >= 0;
 
         return marioArriba && marioCayendo;
     }

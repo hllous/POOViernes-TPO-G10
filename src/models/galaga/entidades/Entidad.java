@@ -1,6 +1,6 @@
 package models.galaga.entidades;
 
-import interfaces.marioBros.IEntidad;
+import interfaces.galaga.IEntidad;
 
 public abstract class Entidad implements IEntidad {
     protected int x, y;

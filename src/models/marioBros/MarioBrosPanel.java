@@ -26,7 +26,7 @@ public class MarioBrosPanel extends JPanel implements Runnable, KeyListener, Act
     private Thread gameThread;
     private boolean running = false;
     private boolean pausado = false;
-    private boolean ganado = false; // NUEVO: estado de victoria
+    private boolean ganado = false;
 
     /// Constructor
 
@@ -39,7 +39,7 @@ public class MarioBrosPanel extends JPanel implements Runnable, KeyListener, Act
 
         nivelActual = new Nivel1_1();
         crearMenuPausa();
-        crearMenuVictoria(); // NUEVO
+        crearMenuVictoria();
 
         setFocusable(true);
         addKeyListener(this);
