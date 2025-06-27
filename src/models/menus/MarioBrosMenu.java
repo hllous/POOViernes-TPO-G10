@@ -34,14 +34,18 @@ public class MarioBrosMenu extends JPanel implements IMenu, ActionListener {
     private void inicializarComponentes() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setOpaque(false);
+        add(Box.createVerticalStrut(510));
 
         jugarBoton = crearBotonMenu(" ");
         volverBoton = crearBotonMenu("Volver");
 
+        //jugarBoton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        //jugarBoton.setAlignmentY(Component.CENTER_ALIGNMENT);
+
         jugarBoton.addActionListener(this);
         volverBoton.addActionListener(this);
 
-        add(Box.createVerticalStrut(690));
+
         add(jugarBoton);
         add(Box.createVerticalStrut(30));
         add(volverBoton);

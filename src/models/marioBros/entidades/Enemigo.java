@@ -82,34 +82,34 @@ public class Enemigo implements IEntidad {
         if (eliminado) return;
         if (bloques == null) return;
 
-        // MOVIMIENTO HORIZONTAL - SIMPLE
+        // MOVIMIENTO HORIZONTAL
         if (moviendoIzquierda) {
             x -= velocidad;
         } else {
             x += velocidad;
         }
 
-        // Verificar colisión con bloques
+        // Verificar colision con bloques
         for (Bloque bloque : bloques) {
             if (bloque.esSolido() && getBounds().intersects(bloque.getBounds())) {
-                // Retroceder y cambiar dirección
+                // Retroceder y cambiar direccion
                 if (moviendoIzquierda) {
-                    x += velocidad; // Volver atrás
+                    x += velocidad; // Volver atras
                 } else {
-                    x -= velocidad; // Volver atrás
+                    x -= velocidad; // Volver atras
                 }
                 moviendoIzquierda = !moviendoIzquierda; // Cambiar dirección
                 break;
             }
         }
 
-        // GRAVEDAD - SIMPLE
+        // GRAVEDAD
         dy += GRAVEDAD;
         if (dy > MAX_FALL_SPEED) dy = MAX_FALL_SPEED;
 
         y += dy;
 
-        // Colisión vertical
+        // Colision vertical
         for (Bloque bloque : bloques) {
             if (bloque.esSolido() && getBounds().intersects(bloque.getBounds())) {
                 if (dy > 0) { // Cayendo

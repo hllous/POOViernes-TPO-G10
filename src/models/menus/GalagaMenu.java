@@ -73,7 +73,7 @@ public class GalagaMenu extends JPanel implements IMenu, ActionListener {
     private void inicializarComponentes() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-        // Crear título
+        // Crear titulo
         add(Box.createVerticalStrut(200));
         JLabel titleLabel = new JLabel("GALAGA");
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);

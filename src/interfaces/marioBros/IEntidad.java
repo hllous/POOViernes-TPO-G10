@@ -1,9 +1,10 @@
 package interfaces.marioBros;
 
-import java.awt.Graphics;
+import java.awt.*;
 
 public interface IEntidad {
     void mover();
+    Rectangle getBounds();
     double getX();
     double getY();
     int getAncho();
