@@ -40,14 +40,14 @@ public class SnakeGamePanel extends JPanel implements ActionListener, KeyListene
     public SnakeGamePanel(JFrame frame) {
         this.frame = frame;
 
-        // Ajustar el tamaño del panel para centrar el área de juego
+        // Ajustar el tamaño del panel para centrar el area de juego
         Dimension screenSize = frame.getSize();
         setPreferredSize(screenSize);
         setLayout(null);
 
         setBackground(Color.BLACK);
 
-        // Estos dos métodos son fundamentales para capturar eventos de teclado
+        // Estos dos metodos son fundamentales para capturar eventos de teclado
         setFocusable(true);
         addKeyListener(this);
 
@@ -194,15 +194,15 @@ public class SnakeGamePanel extends JPanel implements ActionListener, KeyListene
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        // Calcular posición para centrar el área de juego
+        // Calcular posicion para centrar el area de juego
         int offsetX = (getWidth() - GAME_WIDTH) / 2;
         int offsetY = (getHeight() - GAME_HEIGHT) / 2;
 
-        // Dibujar fondo del área de juego
+        // Dibujar fondo del area de juego
         g.setColor(Color.DARK_GRAY);
         g.fillRect(offsetX, offsetY, GAME_WIDTH, GAME_HEIGHT);
 
-        // Dibujar borde blanco alrededor del área de juego
+        // Dibujar borde blanco alrededor del area de juego
         g.setColor(Color.WHITE);
         g.drawRect(offsetX - 1, offsetY - 1, GAME_WIDTH + 1, GAME_HEIGHT + 1);
 
@@ -211,7 +211,7 @@ public class SnakeGamePanel extends JPanel implements ActionListener, KeyListene
             return;
         }
 
-        // Configurar el área de recorte para que todo se dibuje dentro del área de juego
+        // Configurar el area
         Graphics2D g2d = (Graphics2D) g.create();
         g2d.translate(offsetX, offsetY);
 
