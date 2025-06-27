@@ -11,6 +11,7 @@ package "interfaces.menu" {
 package "interfaces.marioBros" {
     interface IEntidad {
         + mover(): void
+        + getBounds(): Rectangle
         + getX(): double
         + getY(): double
         + getAncho(): int
